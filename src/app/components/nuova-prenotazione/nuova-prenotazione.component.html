@@ -1,0 +1,38 @@
+<div class="container my-4">
+  <h2>Nuova Prenotazione</h2>
+
+  <form (ngSubmit)="salvaPrenotazione()" #prenForm="ngForm">
+    <div class="mb-3">
+      <label for="nome" class="form-label">Nome Cliente</label>
+      <input type="text" id="nome" class="form-control" [(ngModel)]="prenotazione.nome" name="nome" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="telefono" class="form-label">Telefono</label>
+      <input type="text" id="telefono" class="form-control" [(ngModel)]="prenotazione.telefono" name="telefono" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="dataOra" class="form-label">Data e Ora</label>
+      <input type="datetime-local" id="dataOra" class="form-control" [(ngModel)]="prenotazione.dataOra" name="dataOra" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="trattamento" class="form-label">Trattamento</label>
+      <select id="trattamento" class="form-select" [(ngModel)]="prenotazione.trattamentoId" name="trattamentoId" required>
+        <option *ngFor="let t of trattamenti" [value]="t.id">{{ t.nome }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="note" class="form-label">Note</label>
+      <textarea id="note" class="form-control" [(ngModel)]="prenotazione.note" name="note"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salva</button>
+  </form>
+
+  <div *ngIf="messaggio" class="alert alert-success mt-3">
+    {{ messaggio }}
+  </div>
+</div>

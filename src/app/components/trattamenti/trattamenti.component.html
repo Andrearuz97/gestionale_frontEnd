@@ -1,0 +1,36 @@
+<div class="container my-4">
+  <h1>Trattamenti</h1>
+
+  <div *ngIf="loading" class="mb-3">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table class="table table-striped" *ngIf="trattamenti.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Prezzo</th>
+        <th>Durata</th>
+        <th>Data Creazione</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of trattamenti">
+        <td>{{ t.id }}</td>
+        <td>{{ t.nome }}</td>
+        <td>{{ t.prezzo | number:'1.2-2' }}</td>
+        <td>{{ t.durata }} min</td>
+        <td>{{ t.dataCreazione | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="trattamenti.length === 0 && !loading" class="alert alert-info">
+    Nessun trattamento disponibile.
+  </div>
+</div>
