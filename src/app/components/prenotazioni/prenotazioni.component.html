@@ -2,13 +2,49 @@
   <h2 class="mb-4 text-center">📋 Gestione Prenotazioni</h2>
 
   <!-- Barra filtri -->
-  <div class="d-flex flex-wrap gap-2 mb-3 align-items-center justify-content-between">
-    <input type="text" class="form-control" placeholder="🔎 Nome cliente" [(ngModel)]="filtroNome" />
-    <input type="date" class="form-control" [(ngModel)]="filtroData" />
-    <button class="btn btn-outline-primary" (click)="applicaFiltri()">🔍 Filtra</button>
-    <button class="btn btn-outline-secondary" (click)="resetFiltri()">♻️ Reset</button>
-    <button class="btn btn-outline-dark" (click)="caricaPrenotazioni()">🔄 Refresh</button>
+  <div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <form class="row g-3 align-items-center">
+      <div class="col-md-4 position-relative">
+  <label for="inputNome" class="form-label fw-bold">👤 Nome cliente</label>
+  <input
+    id="inputNome"
+    list="listaNomi"
+    type="text"
+    class="form-control"
+    placeholder="Es. Maria Rossi"
+    [(ngModel)]="filtroNome"
+    name="filtroNome"
+  />
+  <datalist id="listaNomi">
+    <option *ngFor="let nome of nomiClienti" [value]="nome"></option>
+  </datalist>
+</div>
+      <div class="col-md-3">
+        <label for="inputData" class="form-label fw-bold">📅 Data prenotazione</label>
+        <input
+          id="inputData"
+          type="date"
+          class="form-control"
+          [(ngModel)]="filtroData"
+          name="filtroData"
+        />
+      </div>
+      <div class="col-md-5 d-flex align-items-end justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" (click)="applicaFiltri()" title="Filtra">
+          🔍 Filtra
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="resetFiltri()" title="Reset">
+          ♻️ Reset
+        </button>
+        <button type="button" class="btn btn-dark" (click)="caricaPrenotazioni()" title="Refresh">
+          🔄 Refresh
+        </button>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <!-- Loading -->
   <div *ngIf="loading" class="text-center my-4">

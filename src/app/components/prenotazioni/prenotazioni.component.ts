@@ -8,6 +8,7 @@ import { TrattamentiService } from '../../services/trattamenti.service';
   styleUrls: ['./prenotazioni.component.scss']
 })
 export class PrenotazioniComponent implements OnInit {
+  nomiClienti: string[] = [];
   prenotazioni: (Prenotazione & { editing?: boolean })[] = [];
   trattamenti: Trattamento[] = [];
   loading = false;
@@ -27,18 +28,20 @@ export class PrenotazioniComponent implements OnInit {
   }
 
   caricaPrenotazioni() {
-    this.loading = true;
-    this.prenotazioniService.getPrenotazioni().subscribe({
-      next: data => {
-        this.prenotazioni = data.map(p => ({ ...p, editing: false }));
-        this.loading = false;
-      },
-      error: err => {
-        this.error = 'Errore nel caricamento delle prenotazioni';
-        this.loading = false;
-      }
-    });
-  }
+  this.loading = true;
+  this.prenotazioniService.getPrenotazioni().subscribe({
+    next: data => {
+      this.prenotazioni = data;
+      this.nomiClienti = [...new Set(data.map(p => p.nome))]; // nomi unici
+      this.loading = false;
+    },
+    error: err => {
+      this.error = 'Errore nel caricamento delle prenotazioni';
+      this.loading = false;
+    }
+  });
+}
+
 
   caricaTrattamenti() {
     this.trattamentiService.getTrattamenti().subscribe({
