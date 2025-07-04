@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Trattamento } from '../../interfaces/trattamento';
-import { TrattamentiService } from 'src/app/services/Trattamenti.service';
+import { TrattamentiService } from 'src/app/services/trattamenti.service';
 @Component({
   selector: 'app-trattamenti',
   templateUrl: './trattamenti.component.html',

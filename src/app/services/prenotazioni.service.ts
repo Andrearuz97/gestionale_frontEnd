@@ -5,12 +5,15 @@ import { Observable } from 'rxjs';
 export interface Trattamento {
   id: number;
   nome: string;
+  prezzo?: number;
+  durata?: number;
+  dataCreazione?: string;
 }
 
 export interface Prenotazione {
   id: number;
-  nome: string;             // CAMPO CORRETTO
-  dataOra: string;          // CAMPO CORRETTO
+  nome: string;
+  dataOra: string;
   trattamento: Trattamento;
   stato: string;
 }
@@ -27,7 +30,11 @@ export class PrenotazioniService {
     return this.http.get<Prenotazione[]>(this.apiUrl);
   }
 
-  aggiornaStato(id: number, stato: string): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${id}/stato`, { stato });
+  salva(prenotazione: Prenotazione): Observable<Prenotazione> {
+    return this.http.put<Prenotazione>(`${this.apiUrl}/${prenotazione.id}`, prenotazione);
+  }
+
+  cancella(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

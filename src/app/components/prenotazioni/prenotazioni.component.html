@@ -1,38 +1,117 @@
 <div class="container my-4">
-  <h1>Lista Prenotazioni</h1>
+  <h2 class="mb-4 text-center">📋 Gestione Prenotazioni</h2>
 
-  <div *ngIf="loading" class="mb-3">
-    <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+  <!-- Barra filtri -->
+  <div class="d-flex flex-wrap gap-2 mb-3 align-items-center justify-content-between">
+    <input type="text" class="form-control" placeholder="🔎 Nome cliente" [(ngModel)]="filtroNome" />
+    <input type="date" class="form-control" [(ngModel)]="filtroData" />
+    <button class="btn btn-outline-primary" (click)="applicaFiltri()">🔍 Filtra</button>
+    <button class="btn btn-outline-secondary" (click)="resetFiltri()">♻️ Reset</button>
+    <button class="btn btn-outline-dark" (click)="caricaPrenotazioni()">🔄 Refresh</button>
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Caricamento...</span></div>
+  </div>
 
-  <table class="table table-striped" *ngIf="prenotazioni.length > 0">
-    <thead>
+  <!-- Errore -->
+  <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+  <!-- Tabella -->
+  <table class="table table-bordered table-hover text-center align-middle" *ngIf="prenotazioni.length > 0">
+    <thead class="table-light">
       <tr>
         <th>ID</th>
         <th>Cliente</th>
         <th>Data</th>
         <th>Trattamento</th>
         <th>Stato</th>
+        <th>Azioni</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of prenotazioni">
         <td>{{ p.id }}</td>
-        <td>{{ p.nome }}</td>                       <!-- CAMPO CORRETTO -->
-        <td>{{ p.dataOra | date:'short' }}</td>     <!-- CAMPO CORRETTO -->
-        <td>{{ p.trattamento.nome }}</td>
         <td>
-          <select [(ngModel)]="p.stato" (change)="cambiaStato(p.id, p.stato)" class="form-select">
-            <option *ngFor="let s of statiPossibili" [value]="s">{{ s }}</option>
-          </select>
+          <ng-container *ngIf="p.editing; else nomeStatico">
+            <input [(ngModel)]="p.nome" class="form-control form-control-sm" />
+          </ng-container>
+          <ng-template #nomeStatico>{{ p.nome }}</ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="p.editing; else dataStatico">
+            <input type="datetime-local" [(ngModel)]="p.dataOra" class="form-control form-control-sm" />
+          </ng-container>
+          <ng-template #dataStatico>{{ p.dataOra | date:'short' }}</ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="p.editing; else trattamentoStatico">
+            <select [(ngModel)]="p.trattamento.id" class="form-select form-select-sm">
+              <option *ngFor="let t of trattamenti" [value]="t.id">{{ t.nome }}</option>
+            </select>
+          </ng-container>
+          <ng-template #trattamentoStatico>{{ p.trattamento.nome }}</ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="p.editing; else statoBadge">
+            <select
+              [(ngModel)]="p.stato"
+              class="form-select form-select-sm"
+              [ngClass]="{
+                'bg-light text-dark': p.stato === 'CREATA',
+                'bg-warning text-dark': p.stato === 'CONFERMATA',
+                'bg-danger text-white': p.stato === 'ANNULLATA',
+                'bg-success text-white': p.stato === 'COMPLETATA'
+              }">
+              <option *ngFor="let s of statiPossibili" [value]="s">{{ s }}</option>
+            </select>
+          </ng-container>
+          <ng-template #statoBadge>
+            <span class="badge"
+              [ngClass]="{
+                'bg-info text-dark': p.stato === 'CREATA',
+                'bg-warning text-dark': p.stato === 'CONFERMATA',
+                'bg-danger text-white': p.stato === 'ANNULLATA',
+                'bg-success text-white': p.stato === 'COMPLETATA'
+              }">
+              {{ p.stato }}
+            </span>
+          </ng-template>
+        </td>
+
+        <td>
+          <button
+            class="btn btn-primary btn-sm me-1"
+            (click)="p.editing = !p.editing"
+            [title]="p.editing ? 'Annulla Modifica' : 'Modifica'"
+          >
+            ✏️
+          </button>
+          <button
+            *ngIf="p.editing"
+            class="btn btn-success btn-sm me-1"
+            (click)="salvaPrenotazione(p); p.editing = false"
+            title="Salva"
+          >
+            💾
+          </button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="cancellaPrenotazione(p.id)"
+            title="Elimina"
+          >
+            🗑️
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div *ngIf="prenotazioni.length === 0 && !loading" class="alert alert-info">
+  <div *ngIf="prenotazioni.length === 0 && !loading" class="alert alert-info text-center">
     Nessuna prenotazione trovata.
   </div>
 </div>
