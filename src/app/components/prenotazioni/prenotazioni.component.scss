@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+  th, td {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+
+  .btn-sm {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .form-control-sm, .form-select-sm {
+    font-size: 0.75rem;
+  }
+}

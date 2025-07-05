@@ -1,0 +1,24 @@
+<div class="container mt-5" style="max-width: 400px;">
+  <h3 class="mb-4 text-center">Accedi al tuo account</h3>
+
+  <div *ngIf="errorMessage" class="alert alert-danger animate__animated animate__fadeIn">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success animate__animated animate__fadeIn">
+    {{ successMessage }}
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <input type="email" class="form-control" placeholder="Email" [(ngModel)]="email" name="email" required autocomplete="email">
+    </div>
+    <div class="mb-3 input-group">
+      <input [type]="showPassword ? 'text' : 'password'" class="form-control" placeholder="Password"
+             [(ngModel)]="password" name="password" required autocomplete="current-password">
+      <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+        <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </button>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Accedi</button>
+  </form>
+</div>
