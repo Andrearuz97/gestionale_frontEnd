@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PrenotazioniService, Prenotazione, Trattamento } from '../../services/prenotazioni.service';
+import { PrenotazioniService } from '../../services/prenotazioni.service';
 import { TrattamentiService } from '../../services/trattamenti.service';
+import { Prenotazione } from 'src/app/interfaces/prenotazione';
+import { Trattamento } from 'src/app/interfaces/trattamento';
+import { Cliente } from 'src/app/interfaces/cliente';
 
 @Component({
   selector: 'app-prenotazioni',
@@ -8,15 +11,14 @@ import { TrattamentiService } from '../../services/trattamenti.service';
   styleUrls: ['./prenotazioni.component.scss']
 })
 export class PrenotazioniComponent implements OnInit {
-  nomiClienti: string[] = [];
   prenotazioni: (Prenotazione & { editing?: boolean })[] = [];
   trattamenti: Trattamento[] = [];
-  loading = false;
-  error = '';
+  nomiClienti: string[] = [];
   filtroNome = '';
   filtroData = '';
+  loading = false;
+  error = '';
   statiPossibili = ['CREATA', 'CONFERMATA', 'ANNULLATA', 'COMPLETATA'];
-
   prenotazioneDettaglio: Prenotazione | null = null;
 
   constructor(
@@ -29,7 +31,7 @@ export class PrenotazioniComponent implements OnInit {
     this.caricaTrattamenti();
   }
 
-  caricaPrenotazioni() {
+  caricaPrenotazioni(): void {
     this.loading = true;
     this.prenotazioniService.getPrenotazioni().subscribe({
       next: data => {
@@ -45,99 +47,81 @@ export class PrenotazioniComponent implements OnInit {
             dataNascita: ''
           }
         }));
-
-        this.nomiClienti = [...new Set(
-          this.prenotazioni.map(p => `${p.cliente.nome} ${p.cliente.cognome}`.trim())
-        )];
-
+        this.nomiClienti = [...new Set(this.prenotazioni.map(p => `${p.cliente.nome} ${p.cliente.cognome}`.trim()))];
         this.loading = false;
       },
-      error: err => {
+      error: () => {
         this.error = 'Errore nel caricamento delle prenotazioni';
         this.loading = false;
       }
     });
   }
 
-  caricaTrattamenti() {
+  caricaTrattamenti(): void {
     this.trattamentiService.getTrattamenti().subscribe({
       next: data => this.trattamenti = data,
       error: err => console.error('Errore caricamento trattamenti', err)
     });
   }
 
-  applicaFiltri() {
-  this.loading = true;
-  this.error = '';
+  applicaFiltri(): void {
+    this.loading = true;
+    const nomeInserito = this.filtroNome.trim();
+    const data = this.filtroData;
+    let queryParams: any = {};
 
-  const nomeInserito = this.filtroNome.trim();
-  const data = this.filtroData;
+    if (nomeInserito.includes(' ')) {
+      queryParams.nomeCompleto = nomeInserito;
+    } else if (nomeInserito) {
+      queryParams.nome = nomeInserito;
+    }
 
-  let queryParams: any = {};
+    if (data) {
+      queryParams.data = data;
+    }
 
-  if (nomeInserito.includes(' ')) {
-    // Mario Rossi → nomeCompleto
-    queryParams.nomeCompleto = nomeInserito;
-  } else if (nomeInserito) {
-    // Una sola parola: proviamo prima come nome
-    queryParams.nome = nomeInserito;
-  }
+    this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
+      next: dataRisultati => {
+        if (dataRisultati.length === 0 && nomeInserito && !nomeInserito.includes(' ')) {
+          queryParams = { cognome: nomeInserito };
+          if (data) queryParams.data = data;
 
-  if (data) {
-    queryParams.data = data;
-  }
+          this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
+            next: fallback => this.aggiornaListaPrenotazioni(fallback),
+            error: () => {
+              this.error = 'Errore durante il filtro';
+              this.loading = false;
+            }
+          });
 
-  this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
-    next: dataRisultati => {
-      // Se non ha trovato nulla e c'era solo un nome, proviamo come cognome
-      if (dataRisultati.length === 0 && nomeInserito && !nomeInserito.includes(' ')) {
-        queryParams = { cognome: nomeInserito };
-        if (data) queryParams.data = data;
-
-        this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
-          next: fallback => {
-            this.aggiornaListaPrenotazioni(fallback);
-          },
-          error: err => {
-            console.error('Errore nel fallback cognome:', err);
-            this.error = 'Errore durante il filtro';
-            this.loading = false;
-          }
-        });
-
-        return;
+          return;
+        }
+        this.aggiornaListaPrenotazioni(dataRisultati);
+      },
+      error: () => {
+        this.error = 'Errore durante il filtro';
+        this.loading = false;
       }
+    });
+  }
 
-      this.aggiornaListaPrenotazioni(dataRisultati);
-    },
-    error: err => {
-      console.error('Errore durante il filtro:', err);
-      this.error = 'Errore durante il filtro';
-      this.loading = false;
-    }
-  });
-}
+  private aggiornaListaPrenotazioni(prenotazioni: Prenotazione[]) {
+    this.prenotazioni = prenotazioni.map(p => ({
+      ...p,
+      editing: false,
+      cliente: p.cliente ?? {
+        id: 0,
+        nome: '',
+        cognome: '',
+        telefono: '',
+        email: '',
+        dataNascita: ''
+      }
+    }));
+    this.loading = false;
+  }
 
-private aggiornaListaPrenotazioni(prenotazioni: Prenotazione[]) {
-  this.prenotazioni = prenotazioni.map(p => ({
-    ...p,
-    editing: false,
-    cliente: p.cliente ?? {
-      id: 0,
-      nome: '',
-      cognome: '',
-      telefono: '',
-      email: '',
-      dataNascita: ''
-    }
-  }));
-  this.loading = false;
-}
-
-
-
-
-  resetFiltri() {
+  resetFiltri(): void {
     this.filtroNome = '';
     this.filtroData = '';
     this.caricaPrenotazioni();
@@ -146,47 +130,40 @@ private aggiornaListaPrenotazioni(prenotazioni: Prenotazione[]) {
   salvaPrenotazione(p: Prenotazione & { editing?: boolean }) {
     const corpo = this.preparaPrenotazione(p);
     this.prenotazioniService.salva(corpo).subscribe({
-      next: () => {
-        p.editing = false;
-      },
-      error: err => {
-        console.error('❌ Errore durante salvataggio:', err);
-        this.error = 'Errore durante il salvataggio';
-      }
+      next: () => p.editing = false,
+      error: () => this.error = 'Errore durante il salvataggio'
     });
   }
 
-  aggiornaStatoPrenotazione(p: Prenotazione) {
+  aggiornaStatoPrenotazione(p: Prenotazione): void {
     const corpo = this.preparaPrenotazione(p);
     this.prenotazioniService.salva(corpo).subscribe({
-      next: () => console.log(`✅ Stato aggiornato per prenotazione ID ${p.id}`),
-      error: err => {
-        console.error('❌ Errore aggiornamento stato:', err);
-        this.error = 'Errore durante l\'aggiornamento dello stato';
-      }
+      next: () => console.log(`✅ Stato aggiornato per ID ${p.id}`),
+      error: () => this.error = 'Errore durante aggiornamento stato'
     });
   }
 
-  cancellaPrenotazione(id: number) {
+  cancellaPrenotazione(id: number): void {
     if (confirm('Vuoi davvero eliminarla?')) {
       this.prenotazioniService.cancella(id).subscribe({
         next: () => this.caricaPrenotazioni(),
-        error: err => this.error = 'Errore eliminando la prenotazione'
+        error: () => this.error = 'Errore eliminando la prenotazione'
       });
     }
   }
 
-  apriDettagli(p: Prenotazione) {
+  apriDettagli(p: Prenotazione): void {
     this.prenotazioneDettaglio = { ...p };
   }
 
-  chiudiDettagli() {
+  chiudiDettagli(): void {
     this.prenotazioneDettaglio = null;
   }
 
   preparaPrenotazione(p: Prenotazione): any {
     return {
       id: p.id,
+      dataPrenotazione: p.dataPrenotazione, // ← questa è la novità
       dataOra: p.dataOra,
       stato: p.stato,
       note: p.note ?? '',
@@ -194,7 +171,7 @@ private aggiornaListaPrenotazioni(prenotazioni: Prenotazione[]) {
         id: p.trattamento.id
       },
       cliente: {
-        id: (p.cliente as any).id,
+        id: p.cliente.id,
         nome: p.cliente.nome,
         cognome: p.cliente.cognome,
         email: p.cliente.email,

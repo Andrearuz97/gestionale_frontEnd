@@ -1,12 +1,12 @@
-export interface Trattamento {
-  id: number;
-  nome: string;
-}
+import { Cliente } from './cliente';
+import { Trattamento } from './trattamento';
 
 export interface Prenotazione {
   id: number;
-  nome: string;
+  dataPrenotazione: string;
   dataOra: string;
-  trattamento: Trattamento;
   stato: string;
+  note?: string;
+  cliente: Cliente;
+  trattamento: Trattamento;
 }

@@ -6,12 +6,16 @@
     <div class="card-body">
       <div class="row align-items-center">
         <div class="col-md-6">
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            [(ngModel)]="filtro"
-            placeholder="🔍 Cerca per nome o cognome..."
-          />
+         <input
+  type="text"
+  class="form-control form-control-lg"
+  [(ngModel)]="filtro"
+  (keyup.enter)="applicaFiltro()"
+  placeholder="🔍 Cerca per nome o cognome..."
+/>
+
+
+
         </div>
         <div class="col-auto">
           <button class="btn btn-primary me-2" (click)="applicaFiltro()">Filtra</button>
