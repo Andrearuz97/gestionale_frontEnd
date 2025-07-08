@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Trattamento {
-  id: number;
-  nome: string;
-  prezzo: number;
-  durata: number;
-  dataCreazione: string;
-}
+import { Trattamento } from '../interfaces/trattamento';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +15,7 @@ export class TrattamentiService {
     return this.http.get<Trattamento[]>(this.apiUrl);
   }
 
-  creaTrattamento(trattamento: Trattamento): Observable<Trattamento> {
+  creaTrattamento(trattamento: Partial<Trattamento>): Observable<Trattamento> {
     return this.http.post<Trattamento>(this.apiUrl, trattamento);
   }
 
@@ -37,4 +30,18 @@ export class TrattamentiService {
   getTrattamentoById(id: number): Observable<Trattamento> {
     return this.http.get<Trattamento>(`${this.apiUrl}/${id}`);
   }
+
+  disattivaTrattamento(id: number): Observable<void> {
+  return this.http.patch<void>(`${this.apiUrl}/${id}/disattiva`, {});
+}
+
+attivaTrattamento(id: number): Observable<void> {
+  return this.http.patch<void>(`${this.apiUrl}/${id}/attiva`, {});
+}
+
+cercaTrattamenti(nome: string): Observable<Trattamento[]> {
+  return this.http.get<Trattamento[]>(`${this.apiUrl}/cerca?nome=${encodeURIComponent(nome)}`);
+}
+
+
 }

@@ -4,4 +4,5 @@ export interface Trattamento {
   prezzo: number;
   durata: number;
   dataCreazione: string;
+  attivo: boolean;
 }

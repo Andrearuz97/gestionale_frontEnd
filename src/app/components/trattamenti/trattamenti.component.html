@@ -1,36 +1,74 @@
 <div class="container my-4">
-  <h1>Trattamenti</h1>
+  <h2 class="mb-4 text-center">💆 Lista Trattamenti</h2>
 
-  <div *ngIf="loading" class="mb-3">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <!-- Barra ricerca -->
+<div class="mb-3 text-end">
+  <div class="input-group w-50 mx-auto">
+    <input
+      type="text"
+      [(ngModel)]="termineRicerca"
+      (keyup.enter)="cercaTrattamenti()"
+      class="form-control"
+      placeholder="🔍 Cerca trattamento per nome..."
+    />
+    <button class="btn btn-outline-primary" (click)="cercaTrattamenti()">Cerca</button>
+  </div>
+</div>
+
+  <!-- Form creazione/modifica -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label fw-bold">📝 Nome</label>
+        <input type="text" class="form-control" [(ngModel)]="nuovoTrattamento.nome" placeholder="Inserisci nome">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-bold">💶 Prezzo</label>
+        <input type="number" class="form-control" [(ngModel)]="nuovoTrattamento.prezzo" placeholder="€">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-bold">⏱️ Durata (min)</label>
+        <input type="number" class="form-control" [(ngModel)]="nuovoTrattamento.durata" placeholder="Minuti">
+      </div>
+      <div class="col-md-2 text-end">
+        <button *ngIf="!trattamentoInModifica" class="btn btn-success w-100" (click)="creaTrattamento()">➕ Aggiungi</button>
+        <button *ngIf="trattamentoInModifica" class="btn btn-warning w-100" (click)="aggiornaTrattamento()">💾 Salva</button>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-  <table class="table table-striped" *ngIf="trattamenti.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Prezzo</th>
-        <th>Durata</th>
-        <th>Data Creazione</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let t of trattamenti">
-        <td>{{ t.id }}</td>
-        <td>{{ t.nome }}</td>
-        <td>{{ t.prezzo | number:'1.2-2' }}</td>
-        <td>{{ t.durata }} min</td>
-        <td>{{ t.dataCreazione | date:'short' }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="trattamenti.length === 0 && !loading" class="alert alert-info">
-    Nessun trattamento disponibile.
+  <!-- Tabella trattamenti -->
+  <div class="table-responsive shadow-sm">
+    <table class="table table-bordered table-hover align-middle text-center">
+      <thead class="table-primary">
+        <tr>
+          <th>🆔 ID</th>
+          <th>📝 Nome</th>
+          <th>💶 Prezzo</th>
+          <th>⏱️ Durata</th>
+          <th>📋 Stato</th>
+          <th>⚙️ Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of trattamenti">
+          <td>{{ t.id }}</td>
+          <td>{{ t.nome }}</td>
+          <td>{{ t.prezzo | number: '1.2-2' }} €</td>
+          <td>{{ t.durata }} min</td>
+          <td>
+            <span class="badge" [class.bg-success]="t.attivo" [class.bg-secondary]="!t.attivo">
+              {{ t.attivo ? 'Attivo' : 'Disattivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="preparaModifica(t)">✏️</button>
+            <button class="btn btn-sm btn-secondary me-1" *ngIf="t.attivo" (click)="disattiva(t.id)">🚫</button>
+            <button class="btn btn-sm btn-success me-1" *ngIf="!t.attivo" (click)="attiva(t.id)">✅</button>
+            <button class="btn btn-sm btn-danger" (click)="cancella(t.id)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
