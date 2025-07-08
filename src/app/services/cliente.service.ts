@@ -11,13 +11,26 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(query?: string): Observable<Cliente[]> {
-    let url = this.apiUrl;
-    if (query) {
-      url += `?query=${encodeURIComponent(query)}`;
+getAll(filtro?: string): Observable<Cliente[]> {
+  let url = this.apiUrl;
+
+  if (filtro) {
+    const trimmed = filtro.trim();
+    const encoded = encodeURIComponent(trimmed);
+
+    if (trimmed.includes(' ')) {
+      // Caso nome + cognome (es: "Mario Rossi")
+      url += `?nomeCompleto=${encoded}`;
+    } else {
+      // Caso solo nome o solo cognome
+      url += `?nome=${encoded}`;  // solo nome, backend cercherà anche per cognome
     }
-    return this.http.get<Cliente[]>(url);
   }
+
+  return this.http.get<Cliente[]>(url);
+}
+
+
 
   getClienteById(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
