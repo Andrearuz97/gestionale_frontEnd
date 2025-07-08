@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -12,10 +12,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { TrattamentiComponent } from './components/trattamenti/trattamenti.component';
 import { NuovaPrenotazioneComponent } from './components/nuova-prenotazione/nuova-prenotazione.component';
 import { LoginComponent } from './auth/login/login.component';
-
-// 👇 Importa l’interceptor
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ClientiComponent } from './components/clienti/clienti.component';
+
+// ✅ Lingua italiana
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
+registerLocaleData(localeIt);
+
+// 👇 Interceptor JWT
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,9 @@ import { ClientiComponent } from './components/clienti/clienti.component';
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-    }
+    },
+    // ✅ Imposta la lingua di default italiana
+    { provide: LOCALE_ID, useValue: 'it-IT' }
   ],
   bootstrap: [AppComponent]
 })
