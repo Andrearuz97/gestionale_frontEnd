@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class DashboardComponent implements OnInit {
   riepilogo?: DashboardRiepilogo;
   nomeUtente: string | null = '';
+  filtroPeriodo: string = 'oggi'; // valori: oggi, 7giorni, mese, anno, tutto
 
   constructor(
     private dashboardService: DashboardService,
@@ -18,11 +19,14 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dashboardService.getRiepilogo().subscribe({
-      next: (data) => (this.riepilogo = data),
+    this.nomeUtente = this.authService.getUserName();
+    this.aggiornaDashboard();
+  }
+
+  aggiornaDashboard(): void {
+    this.dashboardService.getRiepilogo(this.filtroPeriodo).subscribe({
+      next: (data) => this.riepilogo = data,
       error: (err) => console.error('Errore caricamento riepilogo:', err),
     });
-
-    this.nomeUtente = this.authService.getUserName();
   }
 }

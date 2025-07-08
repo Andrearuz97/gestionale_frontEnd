@@ -3,14 +3,25 @@
     <i class="fa fa-chart-line"></i> Pannello di Controllo
   </h1>
 
-  <!-- Messaggio di benvenuto (con animazione) -->
+  <!-- Messaggio di benvenuto -->
   <div *ngIf="nomeUtente" class="animate__animated animate__fadeInDown">
     <div class="alert alert-success shadow p-3 rounded text-center fs-5">
       👋 Benvenuto, <strong>{{ nomeUtente }}</strong>!✨
     </div>
   </div>
 
-  <!-- Card senza animazione -->
+  <!-- Selezione periodo -->
+  <div class="d-flex justify-content-end mb-3">
+    <select class="form-select w-auto" [(ngModel)]="filtroPeriodo" (change)="aggiornaDashboard()">
+      <option value="oggi">📅 Oggi</option>
+      <option value="7giorni">🗓️ Ultimi 7 giorni</option>
+      <option value="mese">📆 Ultimo mese</option>
+      <option value="anno">📊 Ultimo anno</option>
+      <option value="tutto">📁 Tutto</option>
+    </select>
+  </div>
+
+  <!-- Riepilogo -->
   <div class="row g-3 mt-3" *ngIf="riepilogo">
     <div class="col-md-3">
       <div class="card text-white bg-primary mb-3">
@@ -24,7 +35,7 @@
     <div class="col-md-3">
       <div class="card text-white bg-info mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Prenotazioni Oggi</h5>
+          <h5 class="card-title">Prenotazioni (Periodo)</h5>
           <p class="card-text fs-2">{{ riepilogo.prenotazioniOggi }}</p>
         </div>
       </div>
@@ -42,8 +53,30 @@
     <div class="col-md-3">
       <div class="card text-white bg-warning mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Incasso Oggi</h5>
+          <h5 class="card-title">Incasso (Periodo)</h5>
           <p class="card-text fs-2">€ {{ riepilogo.incassoOggi }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clienti -->
+  <div class="row g-3 mt-2" *ngIf="riepilogo">
+    <div class="col-md-3">
+      <div class="card text-white bg-dark mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Totale Clienti</h5>
+          <p class="card-text fs-2">{{ riepilogo.totaleClienti }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Clienti (Periodo)</h5>
+<p class="card-text fs-2">{{ riepilogo.clientiOggi }}</p>
+
         </div>
       </div>
     </div>

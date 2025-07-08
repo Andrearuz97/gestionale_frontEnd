@@ -3,4 +3,6 @@ export interface DashboardRiepilogo {
   prenotazioniOggi: number;
   incassoTotale: number;
   incassoOggi: number;
+  totaleClienti: number;
+  clientiOggi: number;
 }
