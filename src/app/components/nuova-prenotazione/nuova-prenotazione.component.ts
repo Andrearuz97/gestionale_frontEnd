@@ -16,7 +16,10 @@ export class NuovaPrenotazioneComponent implements OnInit {
 
   prenotazione = {
     nome: '',
+    cognome: '',
     telefono: '',
+    email: '',
+    dataNascita: '',
     dataOra: '',
     trattamentoId: null,
     note: ''
@@ -34,8 +37,11 @@ export class NuovaPrenotazioneComponent implements OnInit {
   salvaPrenotazione(): void {
     this.http.post('http://localhost:9090/api/prenotazioni', this.prenotazione)
       .subscribe(() => {
-        this.messaggio = 'Prenotazione salvata con successo!';
-        this.prenotazione = { nome: '', telefono: '', dataOra: '', trattamentoId: null, note: '' };
+        this.messaggio = '✅ Prenotazione salvata con successo!';
+        this.prenotazione = {
+          nome: '', cognome: '', telefono: '', email: '',
+          dataNascita: '', dataOra: '', trattamentoId: null, note: ''
+        };
       });
   }
 }

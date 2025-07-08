@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface Cliente {
+  nome: string;
+  cognome: string;
+  telefono?: string;
+  email?: string;
+  dataNascita?: string;
+}
+
 export interface Trattamento {
   id: number;
   nome: string;
@@ -12,10 +20,11 @@ export interface Trattamento {
 
 export interface Prenotazione {
   id: number;
-  nome: string;
   dataOra: string;
-  trattamento: Trattamento;
   stato: string;
+  note?: string;
+  trattamento: Trattamento;
+  cliente: Cliente;
 }
 
 @Injectable({
