@@ -17,6 +17,8 @@ export class PrenotazioniComponent implements OnInit {
   filtroData = '';
   statiPossibili = ['CREATA', 'CONFERMATA', 'ANNULLATA', 'COMPLETATA'];
 
+  prenotazioneDettaglio: Prenotazione | null = null;
+
   constructor(
     private prenotazioniService: PrenotazioniService,
     private trattamentiService: TrattamentiService
@@ -31,14 +33,18 @@ export class PrenotazioniComponent implements OnInit {
     this.loading = true;
     this.prenotazioniService.getPrenotazioni().subscribe({
       next: data => {
-        console.log('Prenotazioni ricevute:', data);
-        this.prenotazioni = data
-          .filter(p => p.cliente)
-          .map(p => ({
-            ...p,
-            editing: false,
-            cliente: p.cliente ?? { nome: '', cognome: '', telefono: '', email: '', dataNascita: '' }
-          }));
+        this.prenotazioni = data.map(p => ({
+          ...p,
+          editing: false,
+          cliente: p.cliente ?? {
+            id: 0,
+            nome: '',
+            cognome: '',
+            telefono: '',
+            email: '',
+            dataNascita: ''
+          }
+        }));
 
         this.nomiClienti = [...new Set(
           this.prenotazioni.map(p => `${p.cliente.nome} ${p.cliente.cognome}`.trim())
@@ -60,6 +66,96 @@ export class PrenotazioniComponent implements OnInit {
     });
   }
 
+  applicaFiltri() {
+  this.loading = true;
+  this.error = '';
+
+  const nomeInserito = this.filtroNome.trim();
+  const data = this.filtroData;
+
+  let queryParams: any = {};
+
+  if (nomeInserito.includes(' ')) {
+    // Mario Rossi → nomeCompleto
+    queryParams.nomeCompleto = nomeInserito;
+  } else if (nomeInserito) {
+    // Una sola parola: proviamo prima come nome
+    queryParams.nome = nomeInserito;
+  }
+
+  if (data) {
+    queryParams.data = data;
+  }
+
+  this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
+    next: dataRisultati => {
+      // Se non ha trovato nulla e c'era solo un nome, proviamo come cognome
+      if (dataRisultati.length === 0 && nomeInserito && !nomeInserito.includes(' ')) {
+        queryParams = { cognome: nomeInserito };
+        if (data) queryParams.data = data;
+
+        this.prenotazioniService.getPrenotazioni(queryParams).subscribe({
+          next: fallback => {
+            this.aggiornaListaPrenotazioni(fallback);
+          },
+          error: err => {
+            console.error('Errore nel fallback cognome:', err);
+            this.error = 'Errore durante il filtro';
+            this.loading = false;
+          }
+        });
+
+        return;
+      }
+
+      this.aggiornaListaPrenotazioni(dataRisultati);
+    },
+    error: err => {
+      console.error('Errore durante il filtro:', err);
+      this.error = 'Errore durante il filtro';
+      this.loading = false;
+    }
+  });
+}
+
+private aggiornaListaPrenotazioni(prenotazioni: Prenotazione[]) {
+  this.prenotazioni = prenotazioni.map(p => ({
+    ...p,
+    editing: false,
+    cliente: p.cliente ?? {
+      id: 0,
+      nome: '',
+      cognome: '',
+      telefono: '',
+      email: '',
+      dataNascita: ''
+    }
+  }));
+  this.loading = false;
+}
+
+
+
+
+  resetFiltri() {
+    this.filtroNome = '';
+    this.filtroData = '';
+    this.caricaPrenotazioni();
+  }
+
+  salvaPrenotazione(p: Prenotazione & { editing?: boolean }) {
+    const corpo = this.preparaPrenotazione(p);
+    this.prenotazioniService.salva(corpo).subscribe({
+      next: () => {
+        p.editing = false;
+      },
+      error: err => {
+        console.error('❌ Errore durante salvataggio:', err);
+        this.error = 'Errore durante il salvataggio';
+      }
+    });
+  }
+
   aggiornaStatoPrenotazione(p: Prenotazione) {
     const corpo = this.preparaPrenotazione(p);
     this.prenotazioniService.salva(corpo).subscribe({
@@ -71,18 +167,21 @@ export class PrenotazioniComponent implements OnInit {
     });
   }
 
-  salvaPrenotazione(p: Prenotazione & { editing?: boolean }) {
-    const corpo = this.preparaPrenotazione(p);
-    this.prenotazioniService.salva(corpo).subscribe({
-      next: () => {
-        console.log('✅ Prenotazione aggiornata');
-        p.editing = false;
-      },
-      error: err => {
-        console.error('❌ Errore durante salvataggio:', err);
-        this.error = 'Errore durante il salvataggio';
-      }
-    });
+  cancellaPrenotazione(id: number) {
+    if (confirm('Vuoi davvero eliminarla?')) {
+      this.prenotazioniService.cancella(id).subscribe({
+        next: () => this.caricaPrenotazioni(),
+        error: err => this.error = 'Errore eliminando la prenotazione'
+      });
+    }
+  }
+
+  apriDettagli(p: Prenotazione) {
+    this.prenotazioneDettaglio = { ...p };
+  }
+
+  chiudiDettagli() {
+    this.prenotazioneDettaglio = null;
   }
 
   preparaPrenotazione(p: Prenotazione): any {
@@ -103,38 +202,5 @@ export class PrenotazioniComponent implements OnInit {
         dataNascita: p.cliente.dataNascita
       }
     };
-  }
-
-  cancellaPrenotazione(id: number) {
-    if (confirm('Vuoi davvero eliminarla?')) {
-      this.prenotazioniService.cancella(id).subscribe({
-        next: () => this.prenotazioni = this.prenotazioni.filter(p => p.id !== id),
-        error: err => this.error = 'Errore eliminando la prenotazione'
-      });
-    }
-  }
-
-  applicaFiltri() {
-    this.caricaPrenotazioni();
-    setTimeout(() => {
-      if (this.filtroNome) {
-        this.prenotazioni = this.prenotazioni.filter(p =>
-          (`${p.cliente?.nome ?? ''} ${p.cliente?.cognome ?? ''}`)
-            .toLowerCase()
-            .includes(this.filtroNome.toLowerCase())
-        );
-      }
-      if (this.filtroData) {
-        this.prenotazioni = this.prenotazioni.filter(p =>
-          p.dataOra.startsWith(this.filtroData)
-        );
-      }
-    }, 300);
-  }
-
-  resetFiltri() {
-    this.filtroNome = '';
-    this.filtroData = '';
-    this.caricaPrenotazioni();
   }
 }

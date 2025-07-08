@@ -15,6 +15,7 @@ import { LoginComponent } from './auth/login/login.component';
 
 // 👇 Importa l’interceptor
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { ClientiComponent } from './components/clienti/clienti.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
     NavbarComponent,
     TrattamentiComponent,
     NuovaPrenotazioneComponent,
-    LoginComponent
+    LoginComponent,
+    ClientiComponent
   ],
   imports: [
     BrowserModule,

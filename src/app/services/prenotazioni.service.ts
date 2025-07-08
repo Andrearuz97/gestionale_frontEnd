@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Cliente {
+  id?: number;
   nome: string;
   cognome: string;
   telefono?: string;
@@ -35,9 +36,35 @@ export class PrenotazioniService {
 
   constructor(private http: HttpClient) {}
 
-  getPrenotazioni(): Observable<Prenotazione[]> {
-    return this.http.get<Prenotazione[]>(this.apiUrl);
+getPrenotazioni(queryParams?: { nome?: string; cognome?: string; nomeCompleto?: string; data?: string }): Observable<Prenotazione[]> {
+  let url = this.apiUrl;
+
+  if (queryParams) {
+    const params = [];
+
+    if (queryParams.nomeCompleto) {
+      params.push(`nomeCompleto=${encodeURIComponent(queryParams.nomeCompleto)}`);
+    }
+    if (queryParams.nome) {
+      params.push(`nome=${encodeURIComponent(queryParams.nome)}`);
+    }
+    if (queryParams.cognome) {
+      params.push(`cognome=${encodeURIComponent(queryParams.cognome)}`);
+    }
+    if (queryParams.data) {
+      params.push(`data=${encodeURIComponent(queryParams.data)}`);
+    }
+
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
   }
+
+  return this.http.get<Prenotazione[]>(url);
+}
+
+
+
 
   salva(prenotazione: Prenotazione): Observable<Prenotazione> {
     return this.http.put<Prenotazione>(`${this.apiUrl}/${prenotazione.id}`, prenotazione);

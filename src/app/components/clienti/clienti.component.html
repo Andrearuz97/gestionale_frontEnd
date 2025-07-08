@@ -1,0 +1,85 @@
+<div class="container my-5">
+  <h2 class="text-center mb-4 display-6 fw-semibold">👥 Gestione Clienti</h2>
+
+  <!-- 🔍 Filtro di ricerca -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            [(ngModel)]="filtro"
+            placeholder="🔍 Cerca per nome o cognome..."
+          />
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary me-2" (click)="applicaFiltro()">Filtra</button>
+          <button class="btn btn-outline-secondary" (click)="resetFiltro()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📋 Tabella clienti -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered table-hover text-center align-middle mb-0">
+      <thead class="table-primary text-uppercase small">
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>📞 Telefono</th>
+          <th>📧 Email</th>
+          <th>🎂 Data di Nascita</th>
+          <th>⚙️ Azioni</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr *ngFor="let cliente of clientiFiltrati">
+          <td>
+            <ng-container *ngIf="cliente.editing; else nomeStatico">
+              <input [(ngModel)]="cliente.nome" class="form-control form-control-sm" />
+            </ng-container>
+            <ng-template #nomeStatico>{{ cliente.nome }}</ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="cliente.editing; else cognomeStatico">
+              <input [(ngModel)]="cliente.cognome" class="form-control form-control-sm" />
+            </ng-container>
+            <ng-template #cognomeStatico>{{ cliente.cognome }}</ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="cliente.editing; else telefonoStatico">
+              <input [(ngModel)]="cliente.telefono" class="form-control form-control-sm" />
+            </ng-container>
+            <ng-template #telefonoStatico>{{ cliente.telefono }}</ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="cliente.editing; else emailStatico">
+              <input [(ngModel)]="cliente.email" class="form-control form-control-sm" />
+            </ng-container>
+            <ng-template #emailStatico>{{ cliente.email }}</ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="cliente.editing; else nascitaStatico">
+              <input type="date" [(ngModel)]="cliente.dataNascita" class="form-control form-control-sm" />
+            </ng-container>
+            <ng-template #nascitaStatico>{{ cliente.dataNascita }}</ng-template>
+          </td>
+
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-outline-primary btn-sm" (click)="cliente.editing = !cliente.editing">✏️</button>
+              <button *ngIf="cliente.editing" class="btn btn-outline-success btn-sm" (click)="salvaCliente(cliente)">💾</button>
+              <button class="btn btn-outline-danger btn-sm" (click)="eliminaCliente(cliente.id)">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
