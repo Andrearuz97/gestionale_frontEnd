@@ -5,5 +5,6 @@ export interface Cliente {
   email: string;
   telefono: string;
   dataNascita: string;
-  editing?: boolean;
+  nomeCompleto?: string;
+  editing?: boolean; // ✅ necessario per evitare errori
 }

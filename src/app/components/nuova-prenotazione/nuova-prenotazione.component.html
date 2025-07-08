@@ -1,67 +1,110 @@
-<div class="container my-4">
-  <h2 class="text-center mb-4">📅 Nuova Prenotazione</h2>
+<div class="container my-5">
+  <div class="card shadow p-4">
+    <h2 class="text-center mb-4">📅 Nuova Prenotazione</h2>
 
-  <form (ngSubmit)="salvaPrenotazione()" #prenForm="ngForm" class="card p-4 shadow-sm">
-    <div class="row g-3">
-      <!-- Nome -->
-      <div class="col-md-6">
-        <label for="nome" class="form-label fw-bold">Nome</label>
-        <input type="text" id="nome" class="form-control" [(ngModel)]="prenotazione.nome" name="nome" required>
+    <form (ngSubmit)="salvaPrenotazione()">
+      <div class="row g-4">
+
+        <!-- Selezione tipo cliente -->
+        <div class="col-12">
+          <label class="form-label fw-bold">Tipo Cliente</label>
+          <div class="btn-group w-100" role="group">
+            <input type="radio" class="btn-check" name="tipoCliente" id="radioEsistente" [(ngModel)]="clienteEsistente" [value]="true">
+            <label class="btn btn-outline-primary w-50" for="radioEsistente">Cliente Esistente</label>
+
+            <input type="radio" class="btn-check" name="tipoCliente" id="radioNuovo" [(ngModel)]="clienteEsistente" [value]="false">
+            <label class="btn btn-outline-primary w-50" for="radioNuovo">Nuovo Cliente</label>
+          </div>
+        </div>
+
+        <!-- Cliente esistente: campo ricerca -->
+        <div class="col-md-12 position-relative" *ngIf="clienteEsistente">
+          <label class="form-label fw-bold">👤 Cerca cliente</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchQuery"
+            name="searchQuery"
+            (input)="cercaClienti()"
+            (focus)="showDropdown = true"
+            (blur)="nascondiDropdown()"
+            placeholder="Digita nome o cognome..."
+            autocomplete="off"
+          />
+
+          <!-- Dropdown -->
+<ul *ngIf="showDropdown && clientiFiltrati.length > 0"
+    class="list-group position-absolute z-3 w-100 bg-white shadow border mt-1"
+    style="max-height: 200px; overflow-y: auto; top: 100%;">
+  <li
+    *ngFor="let cliente of clientiFiltrati"
+    class="list-group-item list-group-item-action"
+    (mousedown)="selezionaCliente(cliente)"
+    style="cursor: pointer;">
+    <strong>{{ cliente.nome }} {{ cliente.cognome }}</strong> -
+    <small>{{ cliente.telefono }}</small> •
+    <small>{{ cliente.dataNascita | date:'dd/MM/yyyy' }}</small>
+  </li>
+</ul>
+
+        </div>
+
+        <!-- Cliente nuovo -->
+        <ng-container *ngIf="!clienteEsistente">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Nome</label>
+            <input type="text" class="form-control" [(ngModel)]="prenotazione.nome" name="nome" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Cognome</label>
+            <input type="text" class="form-control" [(ngModel)]="prenotazione.cognome" name="cognome" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Telefono</label>
+            <input type="text" class="form-control" [(ngModel)]="prenotazione.telefono" name="telefono" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="prenotazione.email" name="email">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Data di nascita</label>
+            <input type="date" class="form-control" [(ngModel)]="prenotazione.dataNascita" name="dataNascita">
+          </div>
+        </ng-container>
+
+        <!-- Trattamento -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold">💆 Trattamento</label>
+          <select class="form-select" [(ngModel)]="prenotazione.trattamentoId" name="trattamentoId" required>
+            <option [ngValue]="null" disabled selected>-- Seleziona Trattamento --</option>
+            <option *ngFor="let t of trattamenti" [value]="t.id">{{ t.nome }}</option>
+          </select>
+        </div>
+
+        <!-- Data e ora -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold">📆 Data e Ora</label>
+          <input type="datetime-local" class="form-control" [(ngModel)]="prenotazione.dataOra" name="dataOra" required>
+        </div>
+
+        <!-- Note -->
+        <div class="col-12">
+          <label class="form-label fw-bold">📝 Note</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="prenotazione.note" name="note"></textarea>
+        </div>
+
+        <!-- Pulsante Salva -->
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-success px-4">💾 Salva Prenotazione</button>
+        </div>
+
+        <!-- Messaggio -->
+        <div *ngIf="messaggio" class="alert alert-success mt-3 text-center">
+          {{ messaggio }}
+        </div>
+
       </div>
-
-      <!-- Cognome -->
-      <div class="col-md-6">
-        <label for="cognome" class="form-label fw-bold">Cognome</label>
-        <input type="text" id="cognome" class="form-control" [(ngModel)]="prenotazione.cognome" name="cognome" required>
-      </div>
-
-      <!-- Telefono -->
-      <div class="col-md-6">
-        <label for="telefono" class="form-label fw-bold">Telefono</label>
-        <input type="text" id="telefono" class="form-control" [(ngModel)]="prenotazione.telefono" name="telefono" required>
-      </div>
-
-      <!-- Data di nascita -->
-      <div class="col-md-6">
-        <label for="dataNascita" class="form-label fw-bold">Data di nascita</label>
-        <input type="date" id="dataNascita" class="form-control" [(ngModel)]="prenotazione.dataNascita" name="dataNascita">
-      </div>
-
-      <!-- Data e ora -->
-      <div class="col-md-6">
-        <label for="dataOra" class="form-label fw-bold">Data e Ora</label>
-        <input type="datetime-local" id="dataOra" class="form-control" [(ngModel)]="prenotazione.dataOra" name="dataOra" required>
-      </div>
-
-      <!-- Trattamento -->
-      <div class="col-md-6">
-        <label for="trattamento" class="form-label fw-bold">Trattamento</label>
-        <select id="trattamento" class="form-select" [(ngModel)]="prenotazione.trattamentoId" name="trattamentoId" required>
-          <option *ngFor="let t of trattamenti" [value]="t.id">{{ t.nome }}</option>
-        </select>
-      </div>
-
-      <!-- Email -->
-      <div class="col-md-6">
-        <label for="email" class="form-label fw-bold">Email</label>
-        <input type="email" id="email" class="form-control" [(ngModel)]="prenotazione.email" name="email">
-      </div>
-
-      <!-- Note -->
-      <div class="col-md-12">
-        <label for="note" class="form-label fw-bold">Note</label>
-        <textarea id="note" class="form-control" rows="3" [(ngModel)]="prenotazione.note" name="note"></textarea>
-      </div>
-
-      <!-- Submit -->
-      <div class="col-12 text-end">
-        <button type="submit" class="btn btn-primary">💾 Salva Prenotazione</button>
-      </div>
-    </div>
-
-    <!-- Messaggio di conferma -->
-    <div *ngIf="messaggio" class="alert alert-success mt-3 text-center">
-      {{ messaggio }}
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
