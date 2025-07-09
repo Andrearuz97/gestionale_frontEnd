@@ -47,4 +47,31 @@ getAll(filtro?: string): Observable<Cliente[]> {
   creaCliente(cliente: Cliente): Observable<Cliente> {
     return this.http.post<Cliente>(this.apiUrl, cliente);
   }
+
+
+  promuoviAUtente(dto: { clienteId: number, password: string }): Observable<any> {
+  return this.http.post(
+    `http://localhost:9090/api/clienti/${dto.clienteId}/promuovi-a-utente`,
+    { password: dto.password },
+    { responseType: 'text' as 'json' } // 👈 così Angular accetta una stringa come risposta
+  );
 }
+
+downgradeUtente(clienteId: number): Observable<any> {
+  return this.http.put(
+    `${this.apiUrl}/${clienteId}/revoca-utente`,
+    null, // PUT senza corpo
+    { responseType: 'text' as 'json' }
+  );
+}
+
+riattivaUtente(clienteId: number): Observable<any> {
+  return this.http.put(
+    `${this.apiUrl}/${clienteId}/riattiva-utente`,
+    null,
+    { responseType: 'text' as 'json' }
+  );
+}
+
+}
+

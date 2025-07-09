@@ -6,16 +6,13 @@
     <div class="card-body">
       <div class="row align-items-center">
         <div class="col-md-6">
-         <input
-  type="text"
-  class="form-control form-control-lg"
-  [(ngModel)]="filtro"
-  (keyup.enter)="applicaFiltro()"
-  placeholder="🔍 Cerca per nome o cognome..."
-/>
-
-
-
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            [(ngModel)]="filtro"
+            (keyup.enter)="applicaFiltro()"
+            placeholder="🔍 Cerca per nome o cognome..."
+          />
         </div>
         <div class="col-auto">
           <button class="btn btn-primary me-2" (click)="applicaFiltro()">Filtra</button>
@@ -39,7 +36,7 @@
         </tr>
       </thead>
       <tbody class="bg-white">
-        <tr *ngFor="let cliente of clientiFiltrati">
+        <tr *ngFor="let cliente of clienti">
           <td>
             <ng-container *ngIf="cliente.editing; else nomeStatico">
               <input [(ngModel)]="cliente.nome" class="form-control form-control-sm" />
@@ -80,10 +77,56 @@
               <button class="btn btn-outline-primary btn-sm" (click)="cliente.editing = !cliente.editing">✏️</button>
               <button *ngIf="cliente.editing" class="btn btn-outline-success btn-sm" (click)="salvaCliente(cliente)">💾</button>
               <button class="btn btn-outline-danger btn-sm" (click)="eliminaCliente(cliente.id)">🗑️</button>
+
+              <ng-container *ngIf="cliente.giaUtente; else promuoviBtn">
+  <button
+    class="btn btn-sm btn-outline-secondary"
+    [title]="cliente.attivo ? 'Disattiva Utente' : 'Riattiva Utente'"
+    (click)="cliente.attivo ? downgradeUtente(cliente) : riattivaUtente(cliente)">
+    {{ cliente.attivo ? '❌' : '🔓' }}
+  </button>
+</ng-container>
+
+<ng-template #promuoviBtn>
+  <button
+    class="btn btn-sm btn-outline-warning"
+    title="Promuovi a Utente"
+    (click)="promuoviAClienteUtente(cliente)">
+    🚀
+  </button>
+</ng-template>
+
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- ✅ Modale Promuovi a Utente -->
+<div class="modal fade" id="modalPromuovi" tabindex="-1" aria-labelledby="modalPromuoviLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="modalPromuoviLabel">🚀 Promuovi a Utente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="promuovi()">
+          <div class="mb-3">
+            <label for="emailUtente" class="form-label">📧 Email</label>
+            <input type="email" class="form-control" [(ngModel)]="emailUtente" name="emailUtente" readonly />
+          </div>
+          <div class="mb-3">
+            <label for="passwordUtente" class="form-label">🔒 Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordUtente" name="passwordUtente" required />
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-success">✅ Crea Utente</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

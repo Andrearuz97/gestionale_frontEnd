@@ -6,5 +6,9 @@ export interface Cliente {
   telefono: string;
   dataNascita: string;
   nomeCompleto?: string;
-  editing?: boolean; // ✅ necessario per evitare errori
+  editing?: boolean;
+  giaUtente?: boolean;
+  utente?: any; // se backend lo include
+  attivo?: boolean;
 }
+
