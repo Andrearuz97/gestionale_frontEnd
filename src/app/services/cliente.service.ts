@@ -14,21 +14,14 @@ export class ClienteService {
 getAll(filtro?: string): Observable<Cliente[]> {
   let url = this.apiUrl;
 
-  if (filtro) {
-    const trimmed = filtro.trim();
-    const encoded = encodeURIComponent(trimmed);
-
-    if (trimmed.includes(' ')) {
-      // Caso nome + cognome (es: "Mario Rossi")
-      url += `?nomeCompleto=${encoded}`;
-    } else {
-      // Caso solo nome o solo cognome
-      url += `?nome=${encoded}`;  // solo nome, backend cercherà anche per cognome
-    }
+  if (filtro && filtro.trim() !== '') {
+    const encoded = encodeURIComponent(filtro.trim());
+    url += `?query=${encoded}`;
   }
 
   return this.http.get<Cliente[]>(url);
 }
+
 
 
 

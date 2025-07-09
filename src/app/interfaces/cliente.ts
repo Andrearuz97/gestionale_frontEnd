@@ -5,10 +5,11 @@ export interface Cliente {
   email: string;
   telefono: string;
   dataNascita: string;
+  note?: string;
   nomeCompleto?: string;
   editing?: boolean;
   giaUtente?: boolean;
-  utente?: any; // se backend lo include
+  utente?: any;
   attivo?: boolean;
 }
 

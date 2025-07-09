@@ -22,6 +22,47 @@
     </div>
   </div>
 
+ <!-- 🔘 Bottone + Nuovo Cliente -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="text-center display-6 fw-semibold">👥 Gestione Clienti</h2>
+  <button class="btn btn-success" (click)="nuovoClienteVisibile = !nuovoClienteVisibile">
+    {{ nuovoClienteVisibile ? '➖ Annulla' : '➕ Nuovo Cliente' }}
+  </button>
+</div>
+
+<!-- ✨ Form Nuovo Cliente -->
+<div *ngIf="nuovoClienteVisibile" class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="👤 Nome" [(ngModel)]="nuovoCliente.nome">
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="👤 Cognome" [(ngModel)]="nuovoCliente.cognome">
+      </div>
+      <div class="col-md-4">
+        <input type="tel" class="form-control" placeholder="📞 Telefono" [(ngModel)]="nuovoCliente.telefono">
+      </div>
+      <div class="col-md-4">
+        <input type="email" class="form-control" placeholder="📧 Email" [(ngModel)]="nuovoCliente.email">
+      </div>
+      <div class="col-md-4">
+        <input type="date" class="form-control" [(ngModel)]="nuovoCliente.dataNascita">
+      </div>
+      <div class="col-md-8">
+        <textarea rows="1" class="form-control" placeholder="📋 Note (facoltative)" [(ngModel)]="nuovoCliente.note"></textarea>
+      </div>
+    </div>
+
+    <div class="text-end mt-3">
+      <button class="btn btn-primary" (click)="creaCliente()"
+>✅ Salva Cliente</button>
+    </div>
+  </div>
+</div>
+
+
+
   <!-- 📋 Tabella clienti -->
   <div class="table-responsive shadow-sm rounded">
     <table class="table table-bordered table-hover text-center align-middle mb-0">
