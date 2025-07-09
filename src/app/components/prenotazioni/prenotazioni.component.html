@@ -8,19 +8,16 @@
       <form class="row g-3 align-items-center">
         <div class="col-md-4 position-relative">
           <label for="inputNome" class="form-label fw-bold">👤 Nome cliente</label>
-          <input
+   <input
   id="inputNome"
-  list="listaNomi"
   type="text"
   class="form-control form-control-sm"
-  placeholder="Es. Maria Rossi"
+  placeholder="Trova prenotazione"
   [(ngModel)]="filtroNome"
   name="filtroNome"
-  (keydown.enter)="applicaFiltri()" />
+  (keydown.enter)="applicaFiltri()"
+  autocomplete="off" />
 
-          <datalist id="listaNomi">
-            <option *ngFor="let nome of nomiClienti" [value]="nome"></option>
-          </datalist>
         </div>
 
         <div class="col-md-3">

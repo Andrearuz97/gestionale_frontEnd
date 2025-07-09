@@ -1,6 +1,7 @@
 import { Cliente } from './cliente';
 import { Trattamento } from './trattamento';
 
+
 export interface Prenotazione {
   id: number;
   dataPrenotazione: string;
@@ -9,4 +10,5 @@ export interface Prenotazione {
   note?: string;
   cliente: Cliente;
   trattamento: Trattamento;
+  editing?: boolean; // ✅ aggiunto per toggle modifica
 }
