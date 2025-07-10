@@ -13,8 +13,8 @@ export class PrenotazioniComponent implements OnInit {
   prenotazioni: Prenotazione[] = [];
   loading = false;
   error = '';
-  filtroNome: string = '';
-  filtroData: string = '';
+  filtroNome: string = '';  // Variabile per filtro nome
+  filtroData: string = '';  // Variabile per filtro data
   prenotazioneDettaglio: Prenotazione | null = null;
   statiPossibili = ['CREATA', 'CONFERMATA', 'COMPLETATA', 'ANNULLATA'];
 
@@ -22,9 +22,9 @@ export class PrenotazioniComponent implements OnInit {
   trattamenti: Trattamento[] = [];
   clientiFiltrati: Cliente[] = [];
   clienteSelezionato: Cliente | null = null;
-  searchQuery = '';
+  searchQuery = ''; // Ricerca del cliente
   showDropdown = false;
-  messaggio = '';
+  messaggio = ''; // Messaggio di errore o successo
   orariDisponibili: string[] = [];
 
   nuovaPrenotazione: {
@@ -44,11 +44,12 @@ export class PrenotazioniComponent implements OnInit {
   constructor(private prenotazioniService: PrenotazioniService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.caricaPrenotazioni();
+    this.caricaPrenotazioni(); // Carica prenotazioni all'inizio
     this.caricaTrattamenti();
     this.generaOrari();
   }
 
+  // Funzione per generare gli orari disponibili
   generaOrari(): void {
     const start = 8 * 60;
     const end = 20 * 60;
@@ -64,32 +65,38 @@ export class PrenotazioniComponent implements OnInit {
     this.orariDisponibili = orari;
   }
 
+  // Funzione per caricare le prenotazioni con il filtro
   caricaPrenotazioni(): void {
-  this.loading = true;
-  this.error = '';
+    this.loading = true;
+    this.error = '';
 
-  this.prenotazioniService.getPrenotazioni().subscribe({
-    next: data => {
-      this.prenotazioni = data.map(p => ({
-        ...p,
-        editing: false // NON tocchiamo dataPrenotazione!
-      }));
-      this.loading = false;
-    },
-    error: () => {
-      this.error = 'Errore nel caricamento delle prenotazioni';
-      this.loading = false;
-    }
-  });
-}
+    const params = {
+      filtro: this.filtroNome,  // Filtro per nome
+      data: this.filtroData // Filtro per data
+    };
 
+    this.prenotazioniService.getPrenotazioni(params).subscribe({
+      next: data => {
+        this.prenotazioni = data.map(p => ({
+          ...p,
+          editing: false // Aggiungi la logica per la modifica
+        }));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Errore nel caricamento delle prenotazioni';
+        this.loading = false;
+      }
+    });
+  }
 
-
+  // Funzione per caricare i trattamenti
   caricaTrattamenti(): void {
     this.http.get<Trattamento[]>('http://localhost:9090/api/trattamenti')
       .subscribe(data => this.trattamenti = data);
   }
 
+  // Funzione per cercare i clienti
   cercaClienti(): void {
     if (this.searchQuery.trim().length < 2) {
       this.clientiFiltrati = [];
@@ -103,6 +110,7 @@ export class PrenotazioniComponent implements OnInit {
       });
   }
 
+  // Funzione per selezionare il cliente dalla lista
   selezionaCliente(cliente: Cliente): void {
     this.clienteSelezionato = cliente;
     this.nuovaPrenotazione.clienteId = cliente.id;
@@ -110,47 +118,47 @@ export class PrenotazioniComponent implements OnInit {
     this.showDropdown = false;
   }
 
+  // Funzione per nascondere la lista dei dropdown
   nascondiDropdown(): void {
     setTimeout(() => {
       this.showDropdown = false;
     }, 150);
   }
 
- salvaPrenotazioneForm(): void {
-  const { clienteId, trattamentoId, data, orario, note } = this.nuovaPrenotazione;
+  // Funzione per salvare una prenotazione tramite il form
+  salvaPrenotazioneForm(): void {
+    const { clienteId, trattamentoId, data, orario, note } = this.nuovaPrenotazione;
 
-  if (!clienteId || !trattamentoId || !data || !orario) {
-    this.messaggio = '❌ Compila tutti i campi obbligatori.';
-    setTimeout(() => this.messaggio = '', 3000);
-    return;
+    if (!clienteId || !trattamentoId || !data || !orario) {
+      this.messaggio = '❌ Compila tutti i campi obbligatori.';
+      setTimeout(() => this.messaggio = '', 3000);
+      return;
+    }
+
+    const dataOra = `${data}T${orario}`;
+
+    const payload = {
+      clienteId,
+      trattamentoId,
+      dataOra,
+      note
+    };
+
+    this.prenotazioniService.creaPrenotazione(payload).subscribe({
+      next: () => {
+        this.messaggio = '✅ Prenotazione salvata con successo!';
+        setTimeout(() => this.messaggio = '', 3000);
+        this.resetForm();
+        this.caricaPrenotazioni(); // Mostra la nuova prenotazione
+      },
+      error: () => {
+        this.messaggio = '❌ Errore durante il salvataggio.';
+        setTimeout(() => this.messaggio = '', 3000);
+      }
+    });
   }
 
-  const dataOra = `${data}T${orario}`;
-
-  const payload = {
-    clienteId,
-    trattamentoId,
-    dataOra,
-    note
-  };
-
-  this.prenotazioniService.creaPrenotazione(payload).subscribe({
-    next: () => {
-      this.messaggio = '✅ Prenotazione salvata con successo!';
-      setTimeout(() => this.messaggio = '', 3000);
-      this.resetForm();
-      this.caricaPrenotazioni(); // mostra la nuova prenotazione, incluso dataPrenotazione
-    },
-    error: () => {
-      this.messaggio = '❌ Errore durante il salvataggio.';
-      setTimeout(() => this.messaggio = '', 3000);
-    }
-  });
-}
-
-
-
-
+  // Funzione per resettare il form
   resetForm(): void {
     this.nuovaPrenotazione = {
       clienteId: null,
@@ -165,62 +173,78 @@ export class PrenotazioniComponent implements OnInit {
     this.mostraForm = false;
   }
 
+  // Funzione per aggiornare lo stato della prenotazione
   aggiornaStatoPrenotazione(p: Prenotazione): void {
     this.salvaPrenotazione(p);
   }
 
-  applicaFiltri(): void {
-    this.loading = true;
-    this.error = '';
-    const testo = this.filtroNome.trim();
-    const data = this.filtroData;
+  // Funzione per applicare i filtri (nome e data)
+ applicaFiltri(): void {
+  this.loading = true;
+  this.error = '';
 
-    if (testo) {
-      this.prenotazioniService.ricerca(testo).subscribe({
-        next: dataRicevuta => {
-          this.prenotazioni = data
-            ? dataRicevuta.filter(p => p.dataPrenotazione?.startsWith(data))
-            : dataRicevuta;
-          this.prenotazioni = this.prenotazioni.map(p => ({ ...p, editing: false }));
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Errore nella ricerca';
-          this.loading = false;
-        }
-      });
-    } else if (data) {
-      this.prenotazioniService.getPrenotazioni({ data }).subscribe({
-        next: dataRicevuta => {
-          this.prenotazioni = dataRicevuta.map(p => ({ ...p, editing: false }));
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Errore nel filtraggio per data';
-          this.loading = false;
-        }
-      });
-    } else {
-      this.caricaPrenotazioni();
+  const testo = this.filtroNome.trim();  // Filtro per nome
+  const data = this.formatData(this.filtroData);  // Filtro per data formattato correttamente
+
+  console.log('Filtro applicato:', {filtro: testo, data: data});  // Log dei parametri inviati al backend
+
+  const params = {
+    filtro: testo,  // Filtro per nome
+    data: data      // Filtro per data formattata
+  };
+
+  this.prenotazioniService.getPrenotazioni(params).subscribe({
+    next: dataRicevuta => {
+      console.log('Dati ricevuti:', dataRicevuta);  // Log per vedere i dati ricevuti
+
+      if (dataRicevuta && dataRicevuta.length > 0) {
+        // Filtra prenotazioni in base alla data (solo anno, mese, giorno)
+        this.prenotazioni = dataRicevuta.filter(p => p.dataOra.startsWith(data));  // Confronta solo la parte della data
+        this.prenotazioni = this.prenotazioni.map(p => ({ ...p, editing: false }));
+      } else {
+        this.prenotazioni = [];  // Se non ci sono prenotazioni, svuotiamo la lista
+        this.error = 'Nessuna prenotazione trovata per la data specificata';
+      }
+
+      this.loading = false;
+    },
+    error: () => {
+      this.error = 'Errore nel filtraggio per data';
+      this.loading = false;
     }
-  }
+  });
+}
 
+// Funzione per formattare la data nel formato 'yyyy-MM-dd'
+formatData(data: string): string {
+  if (data) {
+    const date = new Date(data);  // Crea un oggetto Date
+    return date.toISOString().split('T')[0];  // Restituisce solo la parte della data (yyyy-MM-dd)
+  }
+  return '';  // Restituisce una stringa vuota se la data non è valida
+}
+
+
+  // Funzione per reset dei filtri
   resetFiltri(): void {
     this.filtroNome = '';
     this.filtroData = '';
     this.caricaPrenotazioni();
   }
 
+  // Funzione per salvare una prenotazione aggiornata
   salvaPrenotazione(p: Prenotazione): void {
     this.prenotazioniService.salvaPrenotazione(p).subscribe();
   }
 
+  // Funzione per cancellare una prenotazione
   cancellaPrenotazione(id: number): void {
     if (confirm('Sicuro di voler eliminare questa prenotazione?')) {
       this.prenotazioniService.cancella(id).subscribe(() => this.caricaPrenotazioni());
     }
   }
 
+  // Funzione per aprire i dettagli della prenotazione
   apriDettagli(p: Prenotazione): void {
     this.prenotazioneDettaglio = p;
   }
