@@ -41,7 +41,19 @@ export class PrenotazioniService {
     return this.http.get<Prenotazione[]>(url);
   }
 
-  salva(prenotazione: Prenotazione): Observable<Prenotazione> {
+  // ✅ Crea nuova prenotazione (DTO parziale)
+  creaPrenotazione(dto: {
+  clienteId: number;
+  trattamentoId: number;
+  dataOra: string; // <-- invece di data + orario
+  note?: string;
+}): Observable<any> {
+  return this.http.post<any>(this.apiUrl, dto);
+}
+
+
+  // ✅ Salva modifica prenotazione esistente (entità completa)
+  salvaPrenotazione(prenotazione: Prenotazione): Observable<Prenotazione> {
     return this.http.put<Prenotazione>(`${this.apiUrl}/${prenotazione.id}`, prenotazione);
   }
 
@@ -50,7 +62,6 @@ export class PrenotazioniService {
   }
 
   ricerca(query: string): Observable<Prenotazione[]> {
-  return this.http.get<Prenotazione[]>(`${this.apiUrl}/ricerca?query=${encodeURIComponent(query)}`);
-}
-
+    return this.http.get<Prenotazione[]>(`${this.apiUrl}/ricerca?query=${encodeURIComponent(query)}`);
+  }
 }
