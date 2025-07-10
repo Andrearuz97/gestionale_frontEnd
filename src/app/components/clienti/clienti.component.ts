@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../interfaces/cliente';
+import { Prenotazione } from 'src/app/interfaces/prenotazione';
 
 @Component({
   selector: 'app-clienti',
@@ -11,7 +12,7 @@ export class ClientiComponent implements OnInit {
   filtro: string = '';
 
   nuovoClienteVisibile: boolean = false;
-
+  clienteDettagliSelezionato: Cliente | null = null;
   nuovoCliente: Partial<Cliente> = {
     nome: '',
     cognome: '',
@@ -25,6 +26,7 @@ export class ClientiComponent implements OnInit {
   emailUtente: string = '';
   passwordUtente: string = '';
   clienteDaPromuovere: Cliente | null = null;
+  storicoPrenotazioni?: Prenotazione[];
 
   constructor(private clienteService: ClienteService) {}
 
@@ -32,15 +34,22 @@ export class ClientiComponent implements OnInit {
     this.caricaClienti();
   }
 
-  caricaClienti(query?: string) {
-    this.clienteService.getAll(query).subscribe(data => {
+caricaClienti(filtro?: string) {
+  this.clienteService.getAll(filtro).subscribe(data => {
+    console.log('Clienti ricevuti:', data);  // Verifica cosa stai ricevendo dal backend
+
+    if (data && data.length > 0) {
       this.clienti = data.map(c => ({
         ...c,
         editing: false,
         dataNascita: c.dataNascita ? c.dataNascita.substring(0, 10) : ''
       }));
-    });
-  }
+    } else {
+      console.log('Nessun cliente trovato per il filtro:', filtro);  // Caso in cui non ci sono risultati
+    }
+  });
+}
+
 
   applicaFiltro() {
     this.caricaClienti(this.filtro);
@@ -58,13 +67,14 @@ export class ClientiComponent implements OnInit {
       email: cliente.email,
       telefono: cliente.telefono,
       dataNascita: cliente.dataNascita,
-      note: cliente.note
+      note: cliente.note // ✅ note incluse
     };
 
     this.clienteService.aggiornaCliente(cliente.id!, clientePulito).subscribe({
       next: () => {
         cliente.editing = false;
         this.caricaClienti();
+        this.mostraModale('modalClienteAggiornato'); // ✅ modale feedback
       },
       error: () => alert("❌ Errore durante il salvataggio.")
     });
@@ -90,6 +100,7 @@ export class ClientiComponent implements OnInit {
         this.nuovoCliente = { nome: '', cognome: '', email: '', telefono: '', dataNascita: '', note: '' };
         this.nuovoClienteVisibile = false;
         this.caricaClienti();
+        this.mostraModale('modalClienteCreato'); // ✅ modale feedback
       },
       error: () => {
         this.erroreCreazione = 'Errore durante la creazione. Controlla i dati.';
@@ -103,7 +114,6 @@ export class ClientiComponent implements OnInit {
     this.passwordUtente = '';
     this.clienteDaPromuovere = cliente;
 
-    // Apertura modale con fallback per evitare errori con bootstrap
     const modalElement = document.getElementById('modalPromuovi');
     if (modalElement) {
       // @ts-ignore
@@ -158,6 +168,31 @@ export class ClientiComponent implements OnInit {
         },
         error: () => alert("❌ Errore durante la riattivazione.")
       });
+    }
+  }
+
+  apriDettagli(cliente: Cliente) {
+    this.clienteService.getClienteById(cliente.id!).subscribe({
+      next: (dettagli) => {
+        this.clienteDettagliSelezionato = dettagli;
+        console.log(this.clienteDettagliSelezionato);  // Verifica il contenuto
+        const modalEl = document.getElementById('modalDettagliCliente');
+        if (modalEl) {
+          // @ts-ignore
+          const modal = new window.bootstrap.Modal(modalEl);
+          modal.show();
+        }
+      },
+      error: () => alert("❌ Errore nel recupero dettagli cliente.")
+    });
+  }
+
+  mostraModale(id: string) {
+    const el = document.getElementById(id);
+    if (el) {
+      // @ts-ignore
+      const modal = new window.bootstrap.Modal(el);
+      modal.show();
     }
   }
 }

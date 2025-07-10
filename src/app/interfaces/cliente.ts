@@ -1,3 +1,4 @@
+import { Prenotazione } from './prenotazione';
 export interface Cliente {
   id: number;
   nome: string;
@@ -11,5 +12,7 @@ export interface Cliente {
   giaUtente?: boolean;
   utente?: any;
   attivo?: boolean;
+  storicoPrenotazioni?: Prenotazione[];
 }
+
 

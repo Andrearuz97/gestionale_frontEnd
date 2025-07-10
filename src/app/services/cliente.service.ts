@@ -16,7 +16,7 @@ getAll(filtro?: string): Observable<Cliente[]> {
 
   if (filtro && filtro.trim() !== '') {
     const encoded = encodeURIComponent(filtro.trim());
-    url += `?query=${encoded}`;
+    url += `?filtro=${encoded}`;
   }
 
   return this.http.get<Cliente[]>(url);
