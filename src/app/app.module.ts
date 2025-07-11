@@ -22,6 +22,7 @@ registerLocaleData(localeIt);
 // 👇 Interceptor JWT
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TrattamentiComponent,
     LoginComponent,
     ClientiComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

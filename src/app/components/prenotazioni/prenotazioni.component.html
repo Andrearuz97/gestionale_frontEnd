@@ -235,7 +235,7 @@
               <button class="btn btn-primary btn-sm" (click)="p.editing = !p.editing" [title]="p.editing ? 'Annulla Modifica' : 'Modifica'">✏️</button>
               <button *ngIf="p.editing" class="btn btn-success btn-sm" (click)="salvaPrenotazione(p); p.editing = false" title="Salva">💾</button>
               <button class="btn btn-danger btn-sm" (click)="cancellaPrenotazione(p.id)" title="Elimina">🗑️</button>
-              <button class="btn btn-info btn-sm" (click)="apriDettagli(p)" title="Dettagli cliente">🔍</button>
+              <button class="btn btn-info btn-sm" (click)="apriDettagli(p)" title="Dettagli prenotazione">🔍</button>
             </div>
           </td>
         </tr>

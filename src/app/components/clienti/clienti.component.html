@@ -129,9 +129,9 @@
 
           <td>
             <div class="d-flex justify-content-center gap-2">
-              <button class="btn btn-outline-primary btn-sm" (click)="cliente.editing = !cliente.editing">✏️</button>
-              <button *ngIf="cliente.editing" class="btn btn-outline-success btn-sm" (click)="salvaCliente(cliente)">💾</button>
-              <button class="btn btn-outline-danger btn-sm" (click)="eliminaCliente(cliente.id)">🗑️</button>
+              <button class="btn btn-outline-primary btn-sm"title="Modifica Cliente" (click)="cliente.editing = !cliente.editing">✏️</button>
+              <button *ngIf="cliente.editing" class="btn btn-outline-success btn-sm" title="Salva Modifiche" (click)="salvaCliente(cliente)">💾</button>
+              <button class="btn btn-outline-danger btn-sm"title="Elimina Cliente" (click)="eliminaCliente(cliente.id)">🗑️</button>
 
               <ng-container *ngIf="cliente.giaUtente; else promuoviBtn">
                 <button

@@ -1,0 +1,42 @@
+<div class="container my-5" style="max-width: 450px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h3 class="mb-4 text-center fw-bold text-primary">✨ Crea un nuovo account</h3>
+
+      <div *ngIf="errorMessage" class="alert alert-danger animate__animated animate__fadeIn">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success animate__animated animate__fadeIn">
+        {{ successMessage }}
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="row g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control form-control-lg" placeholder="👤 Nome" [(ngModel)]="nome" name="nome" required>
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control form-control-lg" placeholder="👤 Cognome" [(ngModel)]="cognome" name="cognome" required>
+        </div>
+        <div class="col-12">
+          <input type="email" class="form-control form-control-lg" placeholder="📧 Email" [(ngModel)]="email" name="email" required autocomplete="email">
+        </div>
+        <div class="col-md-6">
+          <input type="tel" class="form-control form-control-lg" placeholder="📞 Telefono" [(ngModel)]="telefono" name="telefono">
+        </div>
+        <div class="col-md-6">
+          <input type="date" class="form-control form-control-lg" [(ngModel)]="dataNascita" name="dataNascita">
+        </div>
+        <div class="col-12 input-group">
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg" placeholder="🔒 Password"
+                 [(ngModel)]="password" name="password" required autocomplete="new-password">
+          <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-success w-100 btn-lg">✅ Registrati</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

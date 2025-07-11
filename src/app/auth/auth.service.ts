@@ -12,6 +12,19 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  register(payload: {
+  nome: string;
+  cognome: string;
+  email: string;
+  telefono?: string;
+  dataNascita?: string;
+  password: string;
+}) {
+  return this.http.post<any>(`${this.apiUrl}/register`, payload);
+}
+
+
+
    login(email: string, password: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, { email, password });
   }
