@@ -97,18 +97,23 @@ export class PrenotazioniComponent implements OnInit {
   }
 
   // Funzione per cercare i clienti
-  cercaClienti(): void {
-    if (this.searchQuery.trim().length < 2) {
-      this.clientiFiltrati = [];
-      return;
-    }
-
-    this.http.get<Cliente[]>(`http://localhost:9090/api/clienti?nomeCompleto=${this.searchQuery}`)
-      .subscribe(data => {
-        this.clientiFiltrati = data;
-        this.showDropdown = true;
-      });
+cercaClienti(): void {
+  if (this.searchQuery.trim().length < 2) {
+    // Se la ricerca è troppo corta, non fare nulla
+    this.clientiFiltrati = [];
+    this.showDropdown = false;
+    return;
   }
+
+  // Chiamata al backend per cercare i clienti
+  this.http.get<Cliente[]>(`http://localhost:9090/api/clienti?filtro=${this.searchQuery.trim()}`)
+    .subscribe(data => {
+      // Assegna i risultati della ricerca alla variabile
+      this.clientiFiltrati = data;
+      this.showDropdown = true;  // Mostra il dropdown con i risultati
+    });
+}
+
 
   // Funzione per selezionare il cliente dalla lista
   selezionaCliente(cliente: Cliente): void {
