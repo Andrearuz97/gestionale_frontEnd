@@ -125,13 +125,11 @@ caricaClienti(filtro?: string) {
   promuovi() {
     if (!this.clienteDaPromuovere || !this.passwordUtente) return;
 
-    const payload = {
-      clienteId: this.clienteDaPromuovere.id!,
-      email: this.clienteDaPromuovere.email,
-      password: this.passwordUtente
-    };
+    this.clienteService.promuoviAUtente({
+  clienteId: this.clienteDaPromuovere.id!,
+  password: this.passwordUtente
+}).subscribe({
 
-    this.clienteService.promuoviAUtente(payload).subscribe({
       next: () => {
         const modalElement = document.getElementById('modalPromuovi');
         if (modalElement) {

@@ -160,7 +160,6 @@
 </div>
 
 <!-- ✅ Modale dettagli cliente -->
-<!-- ✅ Modale dettagli cliente -->
 <div class="modal fade" id="modalDettagliCliente" tabindex="-1" aria-labelledby="modalDettagliClienteLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
@@ -266,3 +265,25 @@
     </div>
   </div>
 </div>
+<!-- 🚀 Modale Promuovi -->
+<div class="modal fade" id="modalPromuovi" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title">🚀 Promuovi a Utente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Vuoi promuovere <strong>{{ clienteDaPromuovere?.nome }} {{ clienteDaPromuovere?.cognome }}</strong> a utente?</p>
+        <div class="mb-3">
+          <input type="password" class="form-control" placeholder="Inserisci password per l'utente" [(ngModel)]="passwordUtente">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button class="btn btn-warning" (click)="promuovi()">Conferma</button>
+      </div>
+    </div>
+  </div>
+</div>
+
