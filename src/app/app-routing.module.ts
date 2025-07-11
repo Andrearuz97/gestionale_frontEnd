@@ -6,7 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
 import { TrattamentiComponent } from './components/trattamenti/trattamenti.component';
 import { ClientiComponent } from './components/clienti/clienti.component';
-import { NuovaPrenotazioneComponent } from './components/nuova-prenotazione/nuova-prenotazione.component';
+
 
 import { AuthGuard } from './auth/auth.guard';
 
@@ -16,7 +16,6 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'prenotazioni', component: PrenotazioniComponent, canActivate: [AuthGuard] },
   { path: 'trattamenti', component: TrattamentiComponent, canActivate: [AuthGuard] },
-  { path: 'nuova-prenotazione', component: NuovaPrenotazioneComponent, canActivate: [AuthGuard] },
   { path: 'clienti', component: ClientiComponent, canActivate:[AuthGuard]},
   { path: '**', redirectTo: 'dashboard' }
 ];

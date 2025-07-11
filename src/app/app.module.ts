@@ -10,7 +10,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TrattamentiComponent } from './components/trattamenti/trattamenti.component';
-import { NuovaPrenotazioneComponent } from './components/nuova-prenotazione/nuova-prenotazione.component';
+
 import { LoginComponent } from './auth/login/login.component';
 import { ClientiComponent } from './components/clienti/clienti.component';
 
@@ -30,7 +30,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     PrenotazioniComponent,
     NavbarComponent,
     TrattamentiComponent,
-    NuovaPrenotazioneComponent,
     LoginComponent,
     ClientiComponent,
   ],

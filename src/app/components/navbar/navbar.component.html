@@ -21,11 +21,6 @@
             <i class="fas fa-calendar-check me-1"></i> Prenotazioni
           </a>
         </li>
-        <li class="nav-item">
-        <a class="nav-link text-white fw-semibold" routerLink="/nuova-prenotazione">
-            <i class="fas fa-plus-circle me-1"></i> Nuova Prenotazione
-        </a>
-        </li>
 
         <li class="nav-item">
           <a class="nav-link text-white fw-semibold" routerLink="/trattamenti">
@@ -35,7 +30,7 @@
 
         <li class="nav-item">
           <a class="nav-link text-white fw-semibold" routerLink="/clienti">
-            <i class="fas fa-heart me-1"></i> Clienti
+            <i class="fas fa-users me-1"></i> Clienti
           </a>
         </li>
 
@@ -45,7 +40,7 @@
             <i class="fas fa-user-circle me-1"></i> {{ nomeUtente }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-            <li><button class="dropdown-item" (click)="logout()">Logout</button></li>
+            <li><button class="dropdown-item" (click)="logout()"> Logout</button></li>
           </ul>
         </li>
       </ng-container>
