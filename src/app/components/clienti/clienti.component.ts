@@ -19,7 +19,7 @@ export class ClientiComponent implements OnInit {
     email: '',
     telefono: '',
     dataNascita: '',
-    note: ''
+    note: '',
   };
   erroreCreazione = '';
 
@@ -34,22 +34,21 @@ export class ClientiComponent implements OnInit {
     this.caricaClienti();
   }
 
-caricaClienti(filtro?: string) {
-  this.clienteService.getAll(filtro).subscribe(data => {
-    console.log('Clienti ricevuti:', data);  // Verifica cosa stai ricevendo dal backend
+  caricaClienti(filtro?: string) {
+    this.clienteService.getAll(filtro).subscribe((data) => {
+      console.log('Clienti ricevuti:', data);
 
-    if (data && data.length > 0) {
-      this.clienti = data.map(c => ({
-        ...c,
-        editing: false,
-        dataNascita: c.dataNascita ? c.dataNascita.substring(0, 10) : ''
-      }));
-    } else {
-      console.log('Nessun cliente trovato per il filtro:', filtro);  // Caso in cui non ci sono risultati
-    }
-  });
-}
-
+      if (data && data.length > 0) {
+        this.clienti = data.map((c) => ({
+          ...c,
+          editing: false,
+        }));
+      } else {
+        console.log('Nessun cliente trovato per il filtro:', filtro);
+        this.clienti = [];
+      }
+    });
+  }
 
   applicaFiltro() {
     this.caricaClienti(this.filtro);
@@ -67,7 +66,7 @@ caricaClienti(filtro?: string) {
       email: cliente.email,
       telefono: cliente.telefono,
       dataNascita: cliente.dataNascita,
-      note: cliente.note // ✅ note incluse
+      note: cliente.note, // ✅ note incluse
     };
 
     this.clienteService.aggiornaCliente(cliente.id!, clientePulito).subscribe({
@@ -76,7 +75,7 @@ caricaClienti(filtro?: string) {
         this.caricaClienti();
         this.mostraModale('modalClienteAggiornato'); // ✅ modale feedback
       },
-      error: () => alert("❌ Errore durante il salvataggio.")
+      error: () => alert('❌ Errore durante il salvataggio.'),
     });
   }
 
@@ -97,14 +96,21 @@ caricaClienti(filtro?: string) {
 
     this.clienteService.creaCliente(this.nuovoCliente as Cliente).subscribe({
       next: () => {
-        this.nuovoCliente = { nome: '', cognome: '', email: '', telefono: '', dataNascita: '', note: '' };
+        this.nuovoCliente = {
+          nome: '',
+          cognome: '',
+          email: '',
+          telefono: '',
+          dataNascita: '',
+          note: '',
+        };
         this.nuovoClienteVisibile = false;
         this.caricaClienti();
         this.mostraModale('modalClienteCreato'); // ✅ modale feedback
       },
       error: () => {
         this.erroreCreazione = 'Errore durante la creazione. Controlla i dati.';
-      }
+      },
     });
   }
 
@@ -125,34 +131,37 @@ caricaClienti(filtro?: string) {
   promuovi() {
     if (!this.clienteDaPromuovere || !this.passwordUtente) return;
 
-    this.clienteService.promuoviAUtente({
-  clienteId: this.clienteDaPromuovere.id!,
-  password: this.passwordUtente
-}).subscribe({
+    this.clienteService
+      .promuoviAUtente({
+        clienteId: this.clienteDaPromuovere.id!,
+        password: this.passwordUtente,
+      })
+      .subscribe({
+        next: () => {
+          const modalElement = document.getElementById('modalPromuovi');
+          if (modalElement) {
+            // @ts-ignore
+            const modal = window.bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+          }
 
-      next: () => {
-        const modalElement = document.getElementById('modalPromuovi');
-        if (modalElement) {
-          // @ts-ignore
-          const modal = window.bootstrap.Modal.getInstance(modalElement);
-          modal.hide();
-        }
-
-        alert("✅ Cliente promosso a utente!");
-        this.caricaClienti();
-      },
-      error: () => alert("❌ Errore nella promozione.")
-    });
+          alert('✅ Cliente promosso a utente!');
+          this.caricaClienti();
+        },
+        error: () => alert('❌ Errore nella promozione.'),
+      });
   }
 
   downgradeUtente(cliente: Cliente) {
-    if (confirm("Vuoi davvero rimuovere l'utente associato? Il cliente resterà.")) {
+    if (
+      confirm("Vuoi davvero rimuovere l'utente associato? Il cliente resterà.")
+    ) {
       this.clienteService.downgradeUtente(cliente.id!).subscribe({
         next: () => {
-          alert("✅ Utente rimosso correttamente.");
+          alert('✅ Utente rimosso correttamente.');
           this.caricaClienti();
         },
-        error: () => alert("❌ Errore durante il downgrade.")
+        error: () => alert('❌ Errore durante il downgrade.'),
       });
     }
   }
@@ -161,10 +170,10 @@ caricaClienti(filtro?: string) {
     if (confirm("Vuoi riattivare l'utente associato a questo cliente?")) {
       this.clienteService.riattivaUtente(cliente.id!).subscribe({
         next: () => {
-          alert("✅ Utente riattivato correttamente.");
+          alert('✅ Utente riattivato correttamente.');
           this.caricaClienti();
         },
-        error: () => alert("❌ Errore durante la riattivazione.")
+        error: () => alert('❌ Errore durante la riattivazione.'),
       });
     }
   }
@@ -173,7 +182,7 @@ caricaClienti(filtro?: string) {
     this.clienteService.getClienteById(cliente.id!).subscribe({
       next: (dettagli) => {
         this.clienteDettagliSelezionato = dettagli;
-        console.log(this.clienteDettagliSelezionato);  // Verifica il contenuto
+        console.log(this.clienteDettagliSelezionato); // Verifica il contenuto
         const modalEl = document.getElementById('modalDettagliCliente');
         if (modalEl) {
           // @ts-ignore
@@ -181,7 +190,7 @@ caricaClienti(filtro?: string) {
           modal.show();
         }
       },
-      error: () => alert("❌ Errore nel recupero dettagli cliente.")
+      error: () => alert('❌ Errore nel recupero dettagli cliente.'),
     });
   }
 

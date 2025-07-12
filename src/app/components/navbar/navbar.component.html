@@ -2,13 +2,17 @@
   <a class="navbar-brand fw-bold text-white" routerLink="/">
     <i class="fas fa-spa me-2"></i>Estetica Luce
   </a>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNav"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav align-items-center">
-
       <!-- Se loggato -->
       <ng-container *ngIf="isLogged; else notLoggedIn">
         <li class="nav-item">
@@ -36,11 +40,19 @@
 
         <!-- Profilo utente -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+          <a
+            class="nav-link dropdown-toggle text-white fw-semibold"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
             <i class="fas fa-user-circle me-1"></i> {{ nomeUtente }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-            <li><button class="dropdown-item" (click)="logout()"> Logout</button></li>
+            <li>
+              <button class="dropdown-item" (click)="logout()">Logout</button>
+            </li>
           </ul>
         </li>
       </ng-container>

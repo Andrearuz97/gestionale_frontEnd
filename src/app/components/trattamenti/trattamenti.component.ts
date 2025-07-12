@@ -5,7 +5,7 @@ import { TrattamentiService } from '../../services/trattamenti.service';
 @Component({
   selector: 'app-trattamenti',
   templateUrl: './trattamenti.component.html',
-  styleUrls: ['./trattamenti.component.scss']
+  styleUrls: ['./trattamenti.component.scss'],
 })
 export class TrattamentiComponent implements OnInit {
   trattamenti: Trattamento[] = [];
@@ -16,7 +16,7 @@ export class TrattamentiComponent implements OnInit {
   nuovoTrattamento: Partial<Trattamento> = {
     nome: '',
     prezzo: undefined,
-    durata: undefined
+    durata: undefined,
   };
 
   trattamentoInModifica: Trattamento | null = null;
@@ -30,19 +30,23 @@ export class TrattamentiComponent implements OnInit {
   caricaTrattamenti(): void {
     this.loading = true;
     this.trattamentiService.getTrattamenti().subscribe({
-      next: data => {
+      next: (data) => {
         this.trattamenti = data;
         this.loading = false;
       },
       error: () => {
         this.error = 'Errore nel caricamento trattamenti';
         this.loading = false;
-      }
+      },
     });
   }
 
   creaTrattamento(): void {
-    if (!this.nuovoTrattamento.nome || this.nuovoTrattamento.prezzo == null || this.nuovoTrattamento.durata == null) {
+    if (
+      !this.nuovoTrattamento.nome ||
+      this.nuovoTrattamento.prezzo == null ||
+      this.nuovoTrattamento.durata == null
+    ) {
       alert('Compila tutti i campi');
       return;
     }
@@ -50,11 +54,15 @@ export class TrattamentiComponent implements OnInit {
     this.trattamentiService.creaTrattamento(this.nuovoTrattamento).subscribe({
       next: () => {
         this.caricaTrattamenti();
-        this.nuovoTrattamento = { nome: '', prezzo: undefined, durata: undefined };
+        this.nuovoTrattamento = {
+          nome: '',
+          prezzo: undefined,
+          durata: undefined,
+        };
       },
       error: () => {
         alert('Errore durante la creazione del trattamento.');
-      }
+      },
     });
   }
 
@@ -63,7 +71,7 @@ export class TrattamentiComponent implements OnInit {
     this.nuovoTrattamento = {
       nome: t.nome,
       prezzo: t.prezzo,
-      durata: t.durata
+      durata: t.durata,
     };
   }
 
@@ -76,46 +84,57 @@ export class TrattamentiComponent implements OnInit {
       prezzo: this.nuovoTrattamento.prezzo!,
       durata: this.nuovoTrattamento.durata!,
       attivo: this.trattamentoInModifica.attivo,
-      dataCreazione: this.trattamentoInModifica.dataCreazione
+      dataCreazione: this.trattamentoInModifica.dataCreazione,
     };
 
-    this.trattamentiService.aggiornaTrattamento(aggiornato.id, aggiornato).subscribe({
-      next: () => {
-        this.caricaTrattamenti();
-        this.trattamentoInModifica = null;
-        this.nuovoTrattamento = { nome: '', prezzo: undefined, durata: undefined };
-      },
-      error: () => alert('Errore durante l\'aggiornamento.')
-    });
+    this.trattamentiService
+      .aggiornaTrattamento(aggiornato.id, aggiornato)
+      .subscribe({
+        next: () => {
+          this.caricaTrattamenti();
+          this.trattamentoInModifica = null;
+          this.nuovoTrattamento = {
+            nome: '',
+            prezzo: undefined,
+            durata: undefined,
+          };
+        },
+        error: () => alert("Errore durante l'aggiornamento."),
+      });
   }
 
   disattiva(id: number): void {
-    this.trattamentiService.disattivaTrattamento(id).subscribe(() => this.caricaTrattamenti());
+    this.trattamentiService
+      .disattivaTrattamento(id)
+      .subscribe(() => this.caricaTrattamenti());
   }
 
   attiva(id: number): void {
-    this.trattamentiService.attivaTrattamento(id).subscribe(() => this.caricaTrattamenti());
+    this.trattamentiService
+      .attivaTrattamento(id)
+      .subscribe(() => this.caricaTrattamenti());
   }
 
   cancella(id: number): void {
     if (confirm('Sei sicuro di voler eliminare questo trattamento?')) {
-      this.trattamentiService.cancellaTrattamento(id).subscribe(() => this.caricaTrattamenti());
+      this.trattamentiService
+        .cancellaTrattamento(id)
+        .subscribe(() => this.caricaTrattamenti());
     }
   }
   cercaTrattamenti(): void {
-  if (!this.termineRicerca.trim()) {
-    this.caricaTrattamenti();
-    return;
-  }
-
-  this.trattamentiService.cercaTrattamenti(this.termineRicerca).subscribe({
-    next: data => {
-      this.trattamenti = data;
-    },
-    error: () => {
-      alert('Errore nella ricerca trattamenti.');
+    if (!this.termineRicerca.trim()) {
+      this.caricaTrattamenti();
+      return;
     }
-  });
-}
 
+    this.trattamentiService.cercaTrattamenti(this.termineRicerca).subscribe({
+      next: (data) => {
+        this.trattamenti = data;
+      },
+      error: () => {
+        alert('Errore nella ricerca trattamenti.');
+      },
+    });
+  }
 }

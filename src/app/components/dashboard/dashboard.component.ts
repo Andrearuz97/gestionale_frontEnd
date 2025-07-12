@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   riepilogo?: DashboardRiepilogo;
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
 
   aggiornaDashboard(): void {
     this.dashboardService.getRiepilogo(this.filtroPeriodo).subscribe({
-      next: (data) => this.riepilogo = data,
+      next: (data) => (this.riepilogo = data),
       error: (err) => console.error('Errore caricamento riepilogo:', err),
     });
   }

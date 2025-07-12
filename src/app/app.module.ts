@@ -2,6 +2,7 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ItDatePipe } from './pipes/it-date.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -34,6 +35,7 @@ import { RegisterComponent } from './auth/register/register.component';
     LoginComponent,
     ClientiComponent,
     RegisterComponent,
+    ItDatePipe,
   ],
   imports: [
     BrowserModule,
@@ -41,17 +43,16 @@ import { RegisterComponent } from './auth/register/register.component';
     FormsModule,
     AppRoutingModule,
     NgSelectModule,
-
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
-      multi: true
+      multi: true,
     },
     // ✅ Imposta la lingua di default italiana
-    { provide: LOCALE_ID, useValue: 'it-IT' }
+    { provide: LOCALE_ID, useValue: 'it-IT' },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -15,8 +15,12 @@
           />
         </div>
         <div class="col-auto">
-          <button class="btn btn-primary me-2" (click)="applicaFiltro()">Filtra</button>
-          <button class="btn btn-outline-secondary" (click)="resetFiltro()">Reset</button>
+          <button class="btn btn-primary me-2" (click)="applicaFiltro()">
+            Filtra
+          </button>
+          <button class="btn btn-outline-secondary" (click)="resetFiltro()">
+            Reset
+          </button>
         </div>
       </div>
     </div>
@@ -25,8 +29,11 @@
   <!-- 🔘 Bottone + Nuovo Cliente -->
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="text-center display-6 fw-semibold">👥 Nuovo Cliente</h2>
-    <button class="btn btn-success" (click)="nuovoClienteVisibile = !nuovoClienteVisibile">
-      {{ nuovoClienteVisibile ? '➖ Annulla' : '➕ Nuovo Cliente' }}
+    <button
+      class="btn btn-success"
+      (click)="nuovoClienteVisibile = !nuovoClienteVisibile"
+    >
+      {{ nuovoClienteVisibile ? "➖ Annulla" : "➕ Nuovo Cliente" }}
     </button>
   </div>
 
@@ -35,51 +42,87 @@
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-4">
-          <input type="text" class="form-control" placeholder="👤 Nome" [(ngModel)]="nuovoCliente.nome">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="👤 Nome"
+            [(ngModel)]="nuovoCliente.nome"
+          />
         </div>
         <div class="col-md-4">
-          <input type="text" class="form-control" placeholder="👤 Cognome" [(ngModel)]="nuovoCliente.cognome">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="👤 Cognome"
+            [(ngModel)]="nuovoCliente.cognome"
+          />
         </div>
         <div class="col-md-4">
-          <input type="tel" class="form-control" placeholder="📞 Telefono" [(ngModel)]="nuovoCliente.telefono">
+          <input
+            type="tel"
+            class="form-control"
+            placeholder="📞 Telefono"
+            [(ngModel)]="nuovoCliente.telefono"
+          />
         </div>
         <div class="col-md-4">
-          <input type="email" class="form-control" placeholder="📧 Email" [(ngModel)]="nuovoCliente.email">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="📧 Email"
+            [(ngModel)]="nuovoCliente.email"
+          />
         </div>
         <div class="col-md-4">
-          <input type="date" class="form-control" [(ngModel)]="nuovoCliente.dataNascita">
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="nuovoCliente.dataNascita"
+          />
         </div>
         <div class="col-md-8">
-          <textarea rows="1" class="form-control" placeholder="📋 Note (facoltative)" [(ngModel)]="nuovoCliente.note"></textarea>
+          <textarea
+            rows="1"
+            class="form-control"
+            placeholder="📋 Note (facoltative)"
+            [(ngModel)]="nuovoCliente.note"
+          ></textarea>
         </div>
       </div>
 
       <div class="text-end mt-3">
-        <button class="btn btn-primary" (click)="creaCliente()">✅ Salva Cliente</button>
+        <button class="btn btn-primary" (click)="creaCliente()">
+          ✅ Salva Cliente
+        </button>
       </div>
     </div>
   </div>
 
   <!-- 📋 Tabella clienti -->
   <div class="table-responsive shadow-sm rounded">
-    <table class="table table-bordered table-hover text-center align-middle mb-0">
-    <thead class="table-primary text-uppercase small">
-  <tr>
-    <th>Nome</th>
-    <th>Cognome</th>
-    <th>📞 Telefono</th>
-    <th>📧 Email</th>
-    <th>🎂 Data di Nascita</th>
-    <th>📝 Note</th>
-    <th>⚙️ Azioni</th>
-  </tr>
-</thead>
+    <table
+      class="table table-bordered table-hover text-center align-middle mb-0"
+    >
+      <thead class="table-primary text-uppercase small">
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>📞 Telefono</th>
+          <th>📧 Email</th>
+          <th>🎂 Data di Nascita</th>
+          <th>📝 Note</th>
+          <th>⚙️ Azioni</th>
+        </tr>
+      </thead>
 
       <tbody class="bg-white">
         <tr *ngFor="let cliente of clienti">
           <td>
             <ng-container *ngIf="cliente.editing; else nomeStatico">
-              <input [(ngModel)]="cliente.nome" class="form-control form-control-sm" />
+              <input
+                [(ngModel)]="cliente.nome"
+                class="form-control form-control-sm"
+              />
             </ng-container>
             <ng-template #nomeStatico>
               <span>{{ cliente.nome }}</span>
@@ -88,67 +131,123 @@
 
           <td>
             <ng-container *ngIf="cliente.editing; else cognomeStatico">
-              <input [(ngModel)]="cliente.cognome" class="form-control form-control-sm" />
+              <input
+                [(ngModel)]="cliente.cognome"
+                class="form-control form-control-sm"
+              />
             </ng-container>
             <ng-template #cognomeStatico>{{ cliente.cognome }}</ng-template>
           </td>
 
           <td>
             <ng-container *ngIf="cliente.editing; else telefonoStatico">
-              <input [(ngModel)]="cliente.telefono" class="form-control form-control-sm" />
+              <input
+                [(ngModel)]="cliente.telefono"
+                class="form-control form-control-sm"
+              />
             </ng-container>
             <ng-template #telefonoStatico>{{ cliente.telefono }}</ng-template>
           </td>
 
           <td>
             <ng-container *ngIf="cliente.editing; else emailStatico">
-              <input [(ngModel)]="cliente.email" class="form-control form-control-sm" />
+              <input
+                [(ngModel)]="cliente.email"
+                class="form-control form-control-sm"
+              />
             </ng-container>
             <ng-template #emailStatico>{{ cliente.email }}</ng-template>
           </td>
 
           <td>
             <ng-container *ngIf="cliente.editing; else nascitaStatico">
-              <input type="date" [(ngModel)]="cliente.dataNascita" class="form-control form-control-sm" />
+              <input
+                type="date"
+                [(ngModel)]="cliente.dataNascita"
+                class="form-control form-control-sm"
+              />
             </ng-container>
-            <ng-template #nascitaStatico>{{ cliente.dataNascita }}</ng-template>
+            <ng-template #nascitaStatico>{{
+              cliente.dataNascita | itDate
+            }}</ng-template>
           </td>
 
-         <td>
-  <ng-container *ngIf="cliente.editing; else notePreview">
-    <textarea [(ngModel)]="cliente.note" class="form-control form-control-sm" rows="1"></textarea>
-  </ng-container>
-  <ng-template #notePreview>
-    <span class="d-inline-block text-truncate" style="max-width: 150px;" title="{{ cliente.note }}">
-      {{ cliente.note || '—' }}
-    </span>
-  </ng-template>
-</td>
-
-
+          <td>
+            <ng-container *ngIf="cliente.editing; else notePreview">
+              <textarea
+                [(ngModel)]="cliente.note"
+                class="form-control form-control-sm"
+                rows="1"
+              ></textarea>
+            </ng-container>
+            <ng-template #notePreview>
+              <span
+                class="d-inline-block text-truncate"
+                style="max-width: 150px"
+                title="{{ cliente.note }}"
+              >
+                {{ cliente.note || "—" }}
+              </span>
+            </ng-template>
+          </td>
 
           <td>
+            <!-- Azioni -->
             <div class="d-flex justify-content-center gap-2">
-              <button class="btn btn-outline-primary btn-sm"title="Modifica Cliente" (click)="cliente.editing = !cliente.editing">✏️</button>
-              <button *ngIf="cliente.editing" class="btn btn-outline-success btn-sm" title="Salva Modifiche" (click)="salvaCliente(cliente)">💾</button>
-              <button class="btn btn-outline-danger btn-sm"title="Elimina Cliente" (click)="eliminaCliente(cliente.id)">🗑️</button>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                title="Modifica Cliente"
+                (click)="cliente.editing = !cliente.editing"
+              >
+                ✏️
+              </button>
+              <button
+                *ngIf="cliente.editing"
+                class="btn btn-outline-success btn-sm"
+                title="Salva Modifiche"
+                (click)="salvaCliente(cliente)"
+              >
+                💾
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                title="Elimina Cliente"
+                (click)="eliminaCliente(cliente.id)"
+              >
+                🗑️
+              </button>
 
               <ng-container *ngIf="cliente.giaUtente; else promuoviBtn">
                 <button
                   class="btn btn-sm btn-outline-secondary"
-                  [title]="cliente.attivo ? 'Disattiva Utente' : 'Riattiva Utente'"
-                  (click)="cliente.attivo ? downgradeUtente(cliente) : riattivaUtente(cliente)">
-                  {{ cliente.attivo ? '❌' : '🔓' }}
+                  [title]="
+                    cliente.attivo ? 'Disattiva Utente' : 'Riattiva Utente'
+                  "
+                  (click)="
+                    cliente.attivo
+                      ? downgradeUtente(cliente)
+                      : riattivaUtente(cliente)
+                  "
+                >
+                  {{ cliente.attivo ? "❌" : "🔓" }}
                 </button>
               </ng-container>
 
               <ng-template #promuoviBtn>
-                <button class="btn btn-sm btn-outline-warning" title="Promuovi a Utente" (click)="promuoviAClienteUtente(cliente)">
+                <button
+                  class="btn btn-sm btn-outline-warning"
+                  title="Promuovi a Utente"
+                  (click)="promuoviAClienteUtente(cliente)"
+                >
                   🚀
                 </button>
               </ng-template>
 
-              <button class="btn btn-outline-info btn-sm" title="Visualizza Dettagli Cliente" (click)="apriDettagli(cliente)">
+              <button
+                class="btn btn-outline-info btn-sm"
+                title="Visualizza Dettagli Cliente"
+                (click)="apriDettagli(cliente)"
+              >
                 🔍
               </button>
             </div>
@@ -157,133 +256,227 @@
       </tbody>
     </table>
   </div>
-</div>
 
-<!-- ✅ Modale dettagli cliente -->
-<div class="modal fade" id="modalDettagliCliente" tabindex="-1" aria-labelledby="modalDettagliClienteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="modalDettagliClienteLabel">🧾 Dettagli Cliente</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-      </div>
-      <div class="modal-body">
-        <!-- 🔹 Dati Cliente -->
-        <div class="mb-3">
-          <h6><strong>👤 Cliente:</strong> {{ clienteDettagliSelezionato?.nome }} {{ clienteDettagliSelezionato?.cognome }}</h6>
-          <p><strong>📧 Email:</strong> {{ clienteDettagliSelezionato?.email }}</p>
-          <p><strong>📞 Telefono:</strong> {{ clienteDettagliSelezionato?.telefono }}</p>
-          <p><strong>🎂 Data di nascita:</strong> {{ clienteDettagliSelezionato?.dataNascita }}</p>
+  <!-- ✅ Modale dettagli cliente -->
+  <div
+    class="modal fade"
+    id="modalDettagliCliente"
+    tabindex="-1"
+    aria-labelledby="modalDettagliClienteLabel"
+    aria-hidden="true"
+  >
+    <div
+      class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+    >
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="modalDettagliClienteLabel">
+            🧾 Dettagli Cliente
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Chiudi"
+          ></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <h6>
+              <strong>👤 Cliente:</strong>
+              {{ clienteDettagliSelezionato?.nome }}
+              {{ clienteDettagliSelezionato?.cognome }}
+            </h6>
+            <p>
+              <strong>📧 Email:</strong> {{ clienteDettagliSelezionato?.email }}
+            </p>
+            <p>
+              <strong>📞 Telefono:</strong>
+              {{ clienteDettagliSelezionato?.telefono }}
+            </p>
+            <p>
+              <strong>🎂 Data di nascita:</strong>
+              {{ clienteDettagliSelezionato?.dataNascita | itDate }}
+            </p>
+          </div>
 
-        <!-- 🔹 Note Cliente -->
-        <div class="mb-4">
-          <strong>📝 Note personali:</strong><br>
-          <div class="border rounded bg-light p-2" style="white-space: pre-wrap; min-height: 60px;">
-            {{ clienteDettagliSelezionato?.note?.trim() || '—' }}
+          <div class="mb-4">
+            <strong>📝 Note personali:</strong><br />
+            <div
+              class="border rounded bg-light p-2"
+              style="white-space: pre-wrap; min-height: 60px"
+            >
+              {{ clienteDettagliSelezionato?.note?.trim() || "—" }}
+            </div>
+          </div>
+
+          <!-- 🔹 Note Cliente -->
+          <div class="mb-4">
+            <strong>📝 Note personali:</strong><br />
+            <div
+              class="border rounded bg-light p-2"
+              style="white-space: pre-wrap; min-height: 60px"
+            >
+              {{ clienteDettagliSelezionato?.note?.trim() || "—" }}
+            </div>
+          </div>
+
+          <hr />
+          <h6 class="mb-3">📅 Storico Prenotazioni</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered align-middle">
+              <thead class="table-light text-center">
+                <tr>
+                  <th>📅 Data</th>
+                  <th>⏰ Ora</th>
+                  <th>💆‍♀️ Trattamento</th>
+                  <th>💰 Prezzo</th>
+                  <th>📌 Stato</th>
+                  <th>📝 Note appuntamento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let p of clienteDettagliSelezionato?.storicoPrenotazioni ||
+                      []
+                  "
+                >
+                  <td class="text-nowrap text-center">
+                    {{
+                      p?.dataPrenotazione ? (p.dataPrenotazione | itDate) : "—"
+                    }}
+                  </td>
+                  <td class="text-nowrap text-center">
+                    {{ p?.dataOra ? (p.dataOra | date : "shortTime") : "—" }}
+                  </td>
+                  <td class="text-center">{{ p?.trattamento?.nome || "—" }}</td>
+                  <td class="text-center">
+                    €{{
+                      p?.trattamento?.prezzo != null
+                        ? p.trattamento.prezzo
+                        : "—"
+                    }}
+                  </td>
+                  <td class="text-center">{{ p?.stato || "—" }}</td>
+                  <td class="text-wrap small" style="max-width: 200px">
+                    {{ p?.note?.trim() || "—" }}
+                  </td>
+                </tr>
+                <tr
+                  *ngIf="
+                    !clienteDettagliSelezionato?.storicoPrenotazioni?.length
+                  "
+                >
+                  <td colspan="6" class="text-center text-muted">
+                    Nessuna prenotazione trovata.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <!-- 🔹 Storico Prenotazioni -->
-        <hr>
-        <h6 class="mb-3">📅 Storico Prenotazioni</h6>
-        <div class="table-responsive">
-          <table class="table table-sm table-bordered align-middle">
-            <thead class="table-light text-center">
-              <tr>
-                <th>📅 Data</th>
-                <th>⏰ Ora</th>
-                <th>💆‍♀️ Trattamento</th>
-                <th>💰 Prezzo</th>
-                <th>📌 Stato</th>
-                <th>📝 Note appuntamento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let p of clienteDettagliSelezionato?.storicoPrenotazioni || []">
-                <td class="text-nowrap text-center">{{ p?.dataPrenotazione ? (p.dataPrenotazione | date: 'shortDate') : '—' }}</td>
-                <td class="text-nowrap text-center">{{ p?.dataOra ? (p.dataOra | date: 'shortTime') : '—' }}</td>
-                <td class="text-center">{{ p?.trattamento?.nome || '—' }}</td>
-                <td class="text-center">€{{ p?.trattamento?.prezzo != null ? p.trattamento.prezzo : '—' }}</td>
-                <td class="text-center">{{ p?.stato || '—' }}</td>
-                <td class="text-wrap small" style="max-width: 200px;">{{ p?.note?.trim() || '—' }}</td>
-              </tr>
-              <tr *ngIf="!clienteDettagliSelezionato?.storicoPrenotazioni?.length">
-                <td colspan="6" class="text-center text-muted">Nessuna prenotazione trovata.</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Chiudi
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-      </div>
     </div>
   </div>
-</div>
-<!-- 🟢 Modale Cliente Creato -->
-<div class="modal fade" id="modalClienteCreato" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title">✅ Cliente Creato</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        Il nuovo cliente è stato registrato correttamente!
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 🟢 Modale Cliente Aggiornato -->
-<div class="modal fade" id="modalClienteAggiornato" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">💾 Cliente Aggiornato</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        Le modifiche al cliente sono state salvate correttamente.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 🟠 Modale Cliente Eliminato -->
-<div class="modal fade" id="modalClienteEliminato" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title">🗑️ Cliente Eliminato</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        Il cliente è stato eliminato con successo.
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 🚀 Modale Promuovi -->
-<div class="modal fade" id="modalPromuovi" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0">
-      <div class="modal-header bg-warning text-dark">
-        <h5 class="modal-title">🚀 Promuovi a Utente</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <p>Vuoi promuovere <strong>{{ clienteDaPromuovere?.nome }} {{ clienteDaPromuovere?.cognome }}</strong> a utente?</p>
-        <div class="mb-3">
-          <input type="password" class="form-control" placeholder="Inserisci password per l'utente" [(ngModel)]="passwordUtente">
+  <!-- 🟢 Modale Cliente Creato -->
+  <div class="modal fade" id="modalClienteCreato" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">✅ Cliente Creato</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          Il nuovo cliente è stato registrato correttamente!
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button class="btn btn-warning" (click)="promuovi()">Conferma</button>
+    </div>
+  </div>
+
+  <!-- 🟢 Modale Cliente Aggiornato -->
+  <div class="modal fade" id="modalClienteAggiornato" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">💾 Cliente Aggiornato</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          Le modifiche al cliente sono state salvate correttamente.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🟠 Modale Cliente Eliminato -->
+  <div class="modal fade" id="modalClienteEliminato" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">🗑️ Cliente Eliminato</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          Il cliente è stato eliminato con successo.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 🚀 Modale Promuovi -->
+  <div class="modal fade" id="modalPromuovi" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title">🚀 Promuovi a Utente</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Vuoi promuovere
+            <strong
+              >{{ clienteDaPromuovere?.nome }}
+              {{ clienteDaPromuovere?.cognome }}</strong
+            >
+            a utente?
+          </p>
+          <div class="mb-3">
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Inserisci password per l'utente"
+              [(ngModel)]="passwordUtente"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Annulla
+          </button>
+          <button class="btn btn-warning" (click)="promuovi()">Conferma</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-

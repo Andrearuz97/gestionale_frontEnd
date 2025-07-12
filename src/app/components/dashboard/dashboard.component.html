@@ -6,13 +6,18 @@
   <!-- Messaggio di benvenuto -->
   <div *ngIf="nomeUtente" class="animate__animated animate__fadeInDown">
     <div class="alert alert-success shadow p-3 rounded text-center fs-5">
-      👋 Benvenuto, <strong>{{ nomeUtente }}</strong>!✨
+      👋 Benvenuto, <strong>{{ nomeUtente }}</strong
+      >!✨
     </div>
   </div>
 
   <!-- Selezione periodo -->
   <div class="d-flex justify-content-end mb-3">
-    <select class="form-select w-auto" [(ngModel)]="filtroPeriodo" (change)="aggiornaDashboard()">
+    <select
+      class="form-select w-auto"
+      [(ngModel)]="filtroPeriodo"
+      (change)="aggiornaDashboard()"
+    >
       <option value="oggi">📅 Oggi</option>
       <option value="7giorni">🗓️ Ultimi 7 giorni</option>
       <option value="mese">📆 Ultimo mese</option>
@@ -75,8 +80,7 @@
       <div class="card text-white bg-secondary mb-3">
         <div class="card-body text-center">
           <h5 class="card-title">Clienti (Periodo)</h5>
-<p class="card-text fs-2">{{ riepilogo.clientiOggi }}</p>
-
+          <p class="card-text fs-2">{{ riepilogo.clientiOggi }}</p>
         </div>
       </div>
     </div>
