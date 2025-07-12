@@ -97,25 +97,35 @@
           <td>
             <button
               class="btn btn-sm btn-warning me-1"
+              title="Modifica Trattamento"
               (click)="preparaModifica(t)"
             >
               ✏️
             </button>
+
             <button
               class="btn btn-sm btn-secondary me-1"
+              title="Disattiva Trattamento"
               *ngIf="t.attivo"
               (click)="disattiva(t.id)"
             >
               🚫
             </button>
+
             <button
               class="btn btn-sm btn-success me-1"
+              title="Riattiva Trattamento"
               *ngIf="!t.attivo"
               (click)="attiva(t.id)"
             >
               ✅
             </button>
-            <button class="btn btn-sm btn-danger" (click)="cancella(t.id)">
+
+            <button
+              class="btn btn-sm btn-danger"
+              title="Elimina Trattamento"
+              (click)="cancella(t.id)"
+            >
               🗑️
             </button>
           </td>

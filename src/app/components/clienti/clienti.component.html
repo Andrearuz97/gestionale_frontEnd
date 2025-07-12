@@ -304,18 +304,11 @@
             <strong>📝 Note personali:</strong><br />
             <div
               class="border rounded bg-light p-2"
-              style="white-space: pre-wrap; min-height: 60px"
-            >
-              {{ clienteDettagliSelezionato?.note?.trim() || "—" }}
-            </div>
-          </div>
-
-          <!-- 🔹 Note Cliente -->
-          <div class="mb-4">
-            <strong>📝 Note personali:</strong><br />
-            <div
-              class="border rounded bg-light p-2"
-              style="white-space: pre-wrap; min-height: 60px"
+              style="
+                white-space: pre-wrap;
+                min-height: 60px;
+                word-break: break-word;
+              "
             >
               {{ clienteDettagliSelezionato?.note?.trim() || "—" }}
             </div>
@@ -359,7 +352,14 @@
                     }}
                   </td>
                   <td class="text-center">{{ p?.stato || "—" }}</td>
-                  <td class="text-wrap small" style="max-width: 200px">
+                  <td
+                    class="text-wrap small"
+                    style="
+                      max-width: 200px;
+                      white-space: pre-wrap;
+                      word-break: break-word;
+                    "
+                  >
                     {{ p?.note?.trim() || "—" }}
                   </td>
                 </tr>
