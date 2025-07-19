@@ -221,8 +221,9 @@ export class PrenotazioniComponent implements OnInit {
   }
 
   aggiornaStatoPrenotazione(p: Prenotazione): void {
-    this.salvaPrenotazione(p);
-  }
+  p.editing = true;
+}
+
 
   applicaFiltri(): void {
     this.loading = true;
@@ -273,58 +274,58 @@ export class PrenotazioniComponent implements OnInit {
     this.caricaPrenotazioni();
   }
 
-  salvaPrenotazione(p: Prenotazione): void {
-    const dataOra = p.dataOra;
-    const trattamentoId = p.trattamento.id;
-    const prenotazioneId = p.id;
+ salvaPrenotazione(p: Prenotazione): void {
+  const dataOra = p.dataOra;
+  const trattamentoId = p.trattamento.id;
+  const prenotazioneId = p.id;
 
-    this.http
-      .post<boolean>(
-        'http://localhost:9090/api/prenotazioni/controlla-disponibilita',
-        {
-          dataOra,
-          trattamentoId,
-          prenotazioneId,
+  this.http
+    .post<boolean>(
+      'http://localhost:9090/api/prenotazioni/controlla-disponibilita',
+      {
+        dataOra,
+        trattamentoId,
+        id: prenotazioneId  // ✅ CAMPO CORRETTO
+      }
+    )
+    .subscribe({
+      next: (disponibile) => {
+        if (disponibile) {
+          const dto = {
+            dataOra: p.dataOra,
+            trattamentoId: p.trattamento.id,
+            clienteId: p.cliente.id,
+            nome: p.cliente.nome,
+            cognome: p.cliente.cognome,
+            telefono: p.cliente.telefono,
+            email: p.cliente.email,
+            dataNascita: p.cliente.dataNascita,
+            stato: p.stato,
+            note: p.note,
+            dataPrenotazione: p.dataPrenotazione,
+          };
+
+          this.http
+            .put<Prenotazione>(
+              `http://localhost:9090/api/prenotazioni/${p.id}`,
+              dto
+            )
+            .subscribe(() => {
+              this.messaggio = '✅ Modifiche salvate!';
+              setTimeout(() => (this.messaggio = ''), 3000);
+              this.caricaPrenotazioni();
+            });
+        } else {
+          this.messaggio = '❌ Orario occupato! Impossibile salvare.';
+          setTimeout(() => (this.messaggio = ''), 4000);
         }
-      )
-      .subscribe({
-        next: (disponibile) => {
-          if (disponibile) {
-            const dto = {
-              dataOra: p.dataOra,
-              trattamentoId: p.trattamento.id,
-              clienteId: p.cliente.id,
-              nome: p.cliente.nome,
-              cognome: p.cliente.cognome,
-              telefono: p.cliente.telefono,
-              email: p.cliente.email,
-              dataNascita: p.cliente.dataNascita,
-              stato: p.stato,
-              note: p.note,
-              dataPrenotazione: p.dataPrenotazione,
-            };
-
-            this.http
-              .put<Prenotazione>(
-                `http://localhost:9090/api/prenotazioni/${p.id}`,
-                dto
-              )
-              .subscribe(() => {
-                this.messaggio = '✅ Modifiche salvate!';
-                setTimeout(() => (this.messaggio = ''), 3000);
-                this.caricaPrenotazioni();
-              });
-          } else {
-            this.messaggio = '❌ Orario occupato! Impossibile salvare.';
-            setTimeout(() => (this.messaggio = ''), 4000);
-          }
-        },
-        error: () => {
-          this.messaggio = '❌ Errore nel controllo disponibilità.';
-          setTimeout(() => (this.messaggio = ''), 3000);
-        },
-      });
-  }
+      },
+      error: () => {
+        this.messaggio = '❌ Errore nel controllo disponibilità.';
+        setTimeout(() => (this.messaggio = ''), 3000);
+      },
+    });
+}
 
   cancellaPrenotazione(id: number): void {
     if (confirm('Sicuro di voler eliminare questa prenotazione?')) {

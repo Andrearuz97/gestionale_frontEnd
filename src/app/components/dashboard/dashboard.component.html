@@ -40,7 +40,7 @@
     <div class="col-md-3">
       <div class="card text-white bg-info mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Prenotazioni (Periodo)</h5>
+          <h5 class="card-title">Prenotazioni ({{ filtroPeriodo | periodoLabel }})</h5>
           <p class="card-text fs-2">{{ riepilogo.prenotazioniOggi }}</p>
         </div>
       </div>
@@ -58,7 +58,7 @@
     <div class="col-md-3">
       <div class="card text-white bg-warning mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Incasso (Periodo)</h5>
+          <h5 class="card-title">Incasso ({{ filtroPeriodo | periodoLabel }})</h5>
           <p class="card-text fs-2">€ {{ riepilogo.incassoOggi }}</p>
         </div>
       </div>
@@ -79,7 +79,7 @@
     <div class="col-md-3">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-body text-center">
-          <h5 class="card-title">Clienti (Periodo)</h5>
+          <h5 class="card-title">Clienti ({{ filtroPeriodo | periodoLabel }})</h5>
           <p class="card-text fs-2">{{ riepilogo.clientiOggi }}</p>
         </div>
       </div>

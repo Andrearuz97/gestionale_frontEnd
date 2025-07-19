@@ -323,7 +323,7 @@
                   <th>📅 Data</th>
                   <th>⏰ Ora</th>
                   <th>💆‍♀️ Trattamento</th>
-                  <th>💰 Prezzo</th>
+                  <th>⏱️ Durata</th>
                   <th>📌 Stato</th>
                   <th>📝 Note appuntamento</th>
                 </tr>
@@ -345,12 +345,13 @@
                   </td>
                   <td class="text-center">{{ p?.trattamento?.nome || "—" }}</td>
                   <td class="text-center">
-                    €{{
-                      p?.trattamento?.prezzo != null
-                        ? p.trattamento.prezzo
-                        : "—"
-                    }}
-                  </td>
+  {{
+    p?.trattamento?.durata != null
+      ? p.trattamento.durata + ' min'
+      : "—"
+  }}
+</td>
+
                   <td class="text-center">{{ p?.stato || "—" }}</td>
                   <td
                     class="text-wrap small"

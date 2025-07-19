@@ -11,7 +11,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TrattamentiComponent } from './components/trattamenti/trattamenti.component';
-
+import { PeriodoLabelPipe } from './pipes/periodo-label.pipe';
 import { LoginComponent } from './auth/login/login.component';
 import { ClientiComponent } from './components/clienti/clienti.component';
 
@@ -36,6 +36,7 @@ import { RegisterComponent } from './auth/register/register.component';
     ClientiComponent,
     RegisterComponent,
     ItDatePipe,
+    PeriodoLabelPipe,
   ],
   imports: [
     BrowserModule,
