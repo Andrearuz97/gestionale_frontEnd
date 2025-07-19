@@ -83,6 +83,7 @@
           class="form-select"
           [(ngModel)]="nuovaPrenotazione.trattamentoId"
           name="trattamentoId"
+          (change)="calcolaSlotDisponibili()"
         >
           <option [ngValue]="null" disabled selected>
             -- Seleziona Trattamento --
@@ -102,22 +103,30 @@
             class="form-control"
             [(ngModel)]="nuovaPrenotazione.data"
             name="data"
+            (change)="calcolaSlotDisponibili()"
           />
         </div>
+
         <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">⏰ Orario</label>
-          <select
-            class="form-select"
-            [(ngModel)]="nuovaPrenotazione.orario"
-            name="orario"
-          >
-            <option [ngValue]="null" disabled selected>
-              -- Seleziona orario --
-            </option>
-            <option *ngFor="let orario of orariDisponibili" [value]="orario">
-              {{ orario }}
-            </option>
-          </select>
+          <label class="form-label fw-bold">⏰ Orario Disponibile</label>
+          <div class="d-flex flex-wrap gap-2">
+            <button
+              *ngFor="let slot of slotDisponibili"
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="{
+                'btn-outline-primary': slot !== nuovaPrenotazione.orario,
+                'btn-primary text-white': slot === nuovaPrenotazione.orario
+              }"
+              (click)="nuovaPrenotazione.orario = slot"
+            >
+              {{ slot }}
+            </button>
+
+            <span *ngIf="!slotDisponibili.length" class="text-muted">
+              Nessuno slot libero per questo giorno
+            </span>
+          </div>
         </div>
       </div>
 
