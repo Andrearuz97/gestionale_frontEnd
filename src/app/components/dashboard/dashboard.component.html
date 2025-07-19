@@ -6,18 +6,13 @@
   <!-- Messaggio di benvenuto -->
   <div *ngIf="nomeUtente" class="animate__animated animate__fadeInDown">
     <div class="alert alert-success shadow p-3 rounded text-center fs-5">
-      👋 Benvenuto, <strong>{{ nomeUtente }}</strong
-      >!✨
+      👋 Benvenuto, <strong>{{ nomeUtente }}</strong>!✨
     </div>
   </div>
 
   <!-- Selezione periodo -->
   <div class="d-flex justify-content-end mb-3">
-    <select
-      class="form-select w-auto"
-      [(ngModel)]="filtroPeriodo"
-      (change)="aggiornaDashboard()"
-    >
+    <select class="form-select w-auto" [(ngModel)]="filtroPeriodo" (change)="aggiornaDashboard()">
       <option value="oggi">📅 Oggi</option>
       <option value="7giorni">🗓️ Ultimi 7 giorni</option>
       <option value="mese">📆 Ultimo mese</option>
@@ -26,10 +21,10 @@
     </select>
   </div>
 
-  <!-- Riepilogo -->
-  <div class="row g-3 mt-3" *ngIf="riepilogo">
+  <!-- Riepilogo Generale -->
+  <div class="row g-3" *ngIf="riepilogo">
     <div class="col-md-3">
-      <div class="card text-white bg-primary mb-3">
+      <div class="card text-white bg-primary shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Totale Prenotazioni</h5>
           <p class="card-text fs-2">{{ riepilogo.totalePrenotazioni }}</p>
@@ -38,16 +33,16 @@
     </div>
 
     <div class="col-md-3">
-      <div class="card text-white bg-info mb-3">
+      <div class="card text-white bg-info shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Prenotazioni ({{ filtroPeriodo | periodoLabel }})</h5>
-          <p class="card-text fs-2">{{ riepilogo.prenotazioniOggi }}</p>
+          <p class="card-text fs-2">{{ riepilogo.prenotazioniPeriodo }}</p>
         </div>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card text-white bg-success mb-3">
+      <div class="card text-white bg-success shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Incasso Totale</h5>
           <p class="card-text fs-2">€ {{ riepilogo.incassoTotale }}</p>
@@ -56,10 +51,10 @@
     </div>
 
     <div class="col-md-3">
-      <div class="card text-white bg-warning mb-3">
+      <div class="card text-white bg-warning shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Incasso ({{ filtroPeriodo | periodoLabel }})</h5>
-          <p class="card-text fs-2">€ {{ riepilogo.incassoOggi }}</p>
+          <p class="card-text fs-2">€ {{ riepilogo.incassoPeriodo }}</p>
         </div>
       </div>
     </div>
@@ -68,7 +63,7 @@
   <!-- Clienti -->
   <div class="row g-3 mt-2" *ngIf="riepilogo">
     <div class="col-md-3">
-      <div class="card text-white bg-dark mb-3">
+      <div class="card text-white bg-dark shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Totale Clienti</h5>
           <p class="card-text fs-2">{{ riepilogo.totaleClienti }}</p>
@@ -77,10 +72,49 @@
     </div>
 
     <div class="col-md-3">
-      <div class="card text-white bg-secondary mb-3">
+      <div class="card text-white bg-secondary shadow">
         <div class="card-body text-center">
           <h5 class="card-title">Clienti ({{ filtroPeriodo | periodoLabel }})</h5>
-          <p class="card-text fs-2">{{ riepilogo.clientiOggi }}</p>
+          <p class="card-text fs-2">{{ riepilogo.clientiPeriodo }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stato Prenotazioni -->
+  <div class="row g-3 mt-4" *ngIf="riepilogo">
+    <div class="col-md-3">
+      <div class="card bg-light shadow border-secondary">
+        <div class="card-body text-center">
+          <h5 class="card-title text-secondary">🕓 Create</h5>
+          <p class="card-text fs-2 fw-bold text-secondary">{{ riepilogo.prenotazioniCreate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-light shadow border-primary">
+        <div class="card-body text-center">
+          <h5 class="card-title text-primary">✅ Confermate</h5>
+          <p class="card-text fs-2 fw-bold text-primary">{{ riepilogo.prenotazioniConfermate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-light shadow border-success">
+        <div class="card-body text-center">
+          <h5 class="card-title text-success">💰 Completate</h5>
+          <p class="card-text fs-2 fw-bold text-success">{{ riepilogo.prenotazioniCompletate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-light shadow border-danger">
+        <div class="card-body text-center">
+          <h5 class="card-title text-danger">❌ Annullate</h5>
+          <p class="card-text fs-2 fw-bold text-danger">{{ riepilogo.prenotazioniAnnullate }}</p>
         </div>
       </div>
     </div>

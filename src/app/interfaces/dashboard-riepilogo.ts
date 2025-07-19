@@ -1,8 +1,12 @@
 export interface DashboardRiepilogo {
   totalePrenotazioni: number;
-  prenotazioniOggi: number;
+  prenotazioniPeriodo: number;
   incassoTotale: number;
-  incassoOggi: number;
+  incassoPeriodo: number;
   totaleClienti: number;
-  clientiOggi: number;
+  clientiPeriodo: number;
+  prenotazioniCreate: number;
+  prenotazioniConfermate: number;
+  prenotazioniCompletate: number;
+  prenotazioniAnnullate: number;
 }
